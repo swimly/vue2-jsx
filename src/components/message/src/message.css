@@ -1,0 +1,71 @@
+.m-message{
+  display:block;
+  text-align:center;
+  position:relative;
+  transition:0.3s;
+  min-height: 0px;
+  display:none;
+  &-content{
+    font-size: 0;
+    vertical-align: middle;
+    display:inline-block;
+    box-shadow: 0 3px 6px -4px v(shadow-default), 0 6px 16px v(shadow-default), 0 9px 28px 8px v(shadow-default);
+    background-color: v(background-white);
+    height: 42px;
+    padding: 0 16px;
+    border-radius: 4px;
+    transition:0.3s;
+    position:absolute;
+    white-space: nowrap;
+    top:0;
+    left:50%;
+    transform: translate(-50%, -100%);
+    opacity:0;
+    &::before{
+      content:"";
+      display:inline-block;
+      width:0;
+      height:100%;
+      vertical-align: middle;
+    }
+  }
+  &-label,
+  &-icon{
+    font-size: 14px;
+    display:inline-block;
+    vertical-align: middle;
+    color: v(text-default);
+  }
+  &-icon{
+    &:not(:empty){
+      margin-right: 6px;
+    }
+  }
+  &[visible]{
+    min-height: 58px;
+    .m-message-content{
+      transform: translate(-50%, 0);
+      opacity:1;
+    }
+  }
+  &[type=primary]{
+    .m-message-icon{
+      color: v(color-primary);
+    }
+  }
+  &[type=success]{
+    .m-message-icon{
+      color: v(color-success);
+    }
+  }
+  &[type=error]{
+    .m-message-icon{
+      color: v(color-danger);
+    }
+  }
+  &[type=warning]{
+    .m-message-icon{
+      color: v(color-warning);
+    }
+  }
+}

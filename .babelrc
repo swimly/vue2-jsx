@@ -1,0 +1,28 @@
+{
+  "presets": [
+    // "@vue/babel-preset-jsx",
+    ["@babel/preset-env", {
+      "modules": false,
+      "targets": {
+        "browsers": [
+          "> 1%",
+          "last 2 versions",
+          "IE 11"
+        ]
+      }
+    }]
+  ],
+  "plugins": [
+    "transform-vue-jsx",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": {
+          "version": 3,
+          "proposals": true
+        },
+        "useESModules": true
+      }
+    ]
+  ]
+}

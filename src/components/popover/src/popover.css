@@ -1,0 +1,55 @@
+.m-popover{
+  display:inline-block;
+  &-panel{
+    display:inline-block;
+    background-color: v(background-white);
+    box-shadow: 0 3px 6px -4px v(shadow-default), 0 6px 16px v(shadow-default), 0 9px 28px 8px v(shadow-default);
+    padding: 12px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    position:absolute;
+    display:none;
+    transition: 0.3s;
+    opacity:0;
+    &[placement=left-top]{
+      margin: 8px 0 0 -8px;
+    }
+    &[placement=left]{
+      margin: 0 0 0 -8px;
+    }
+    &[placement=left-bottom]{
+      margin: -8px 0 0 -8px;
+    }
+    &[placement=bottom-left]{
+      margin: 8px 0 0 8px;
+    }
+    &[placement=bottom]{
+      margin: 8px 0 0 0;
+    }
+    &[placement=bottom-right]{
+      margin: 8px 0 0 -8px;
+    }
+    &[placement=right-top]{
+      margin: 8px 0 0 8px;
+    }
+    &[placement=right]{
+      margin: 0 0 0 8px;
+    }
+    &[placement=right-bottom]{
+      margin: -8px 0 0 8px;
+    }
+    &[placement=top-left]{
+      margin: -8px 0 0 8px;
+    }
+    &[placement=top]{
+      margin: -8px 0 0 0;
+    }
+    &[placement=top-right]{
+      margin: -8px 0 0 -8px;
+    }
+    &[visible]{
+      opacity:1;
+      margin:0;
+    }
+  }
+}

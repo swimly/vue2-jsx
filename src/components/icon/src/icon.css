@@ -1,0 +1,30 @@
+.m-icon{
+  display:inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+  svg{
+    width:100%;
+    height:100%;
+  }
+  &[spin]{
+    animation: iconrotate 1s linear infinite;
+  }
+  &[type=primary]{
+    color: v(color-primary);
+  }
+  &[type=warning]{
+    color: v(color-warning);
+  }
+  &[type=success]{
+    color: v(color-success);
+  }
+  &[type=danger]{
+    color: v(color-danger);
+  }
+}
+
+@keyframes iconrotate {
+  to{
+    transform: rotate(360deg);
+  }
+}

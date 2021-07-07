@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="dist/mui.css">
+  <link rel="stylesheet" href="docs/assets/style/vue.css">
+  <link rel="stylesheet" href="docs/assets//style/main.css">
+  <link rel="stylesheet" href="docs/assets/style/theme.css">
+  <style>
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      name: '',
+      repo: '',
+      executeScript: true,
+      themeColor: "#0183fc",
+      copyCode: {
+        buttonText: "复制代码",
+        errorText: "复制失败",
+        successText: "复制成功",
+      },
+      loadSidebar: "docs/_sidebar.md",
+      loadNavbar: "docs/_navbar.md",
+      alias: {
+        "/src/components/.*/_sidebar.md": "docs/_sidebar.md",
+        "/src/components/.*/_navbar.md": "docs/_navbar.md",
+      }
+    }
+  </script>
+  <!-- Docsify v4 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="docs/assets/libs/jquery-3.5.1.min.js"></script>
+  <script src="docs/assets/plugin/docsify-copy-code.js"></script>
+  <script src="docs/assets/plugin/renderCard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="dist/mui.js"></script>
+</body>
+
+</html>

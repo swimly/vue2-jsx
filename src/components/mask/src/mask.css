@@ -1,0 +1,31 @@
+.m-mask{
+  position:fixed;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  background: rgba(0, 0, 0, 0.5);
+  display:none;
+  opacity:0;
+  z-index:1000;
+  transition:0.3s;
+  text-align:center;
+  color: v(text-white);
+  &[visible]{
+    opacity:1;
+  }
+  &:before{
+    content:"";
+    display:inline-block;
+    width:0;
+    height:100%;
+    vertical-align: middle;
+  }
+  &-loading{
+    display:inline-block;
+    p{
+      margin: 8px 0;
+      font-size: 14px;
+    }
+  }
+}

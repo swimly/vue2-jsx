@@ -1,0 +1,32 @@
+$color-primary: #0183FC;
+$color-warning: #FAAD14;
+$color-success: #52C41A;
+$color-danger: #F5222D;
+$color-info: #7885A1;
+$color-header: #385AB3;
+$color-menu: #385AB3;
+$color-state0: #D81362;
+$color-state1: #DB3E17;
+$color-state2: #F3563D;
+$color-state3: #FF8737;
+$color-state4: #FFC538;
+$color-state5: #52B7FE;
+
+$text-black: #000;
+$text-default: #333;
+$text-regular: #666;
+$text-secondary: #999;
+$text-placeholder: #e8e8e8;
+$text-white: #fff;
+
+$background-black: #000;
+$background-gray: #f5f5f5;
+$background-regular: #ebebeb;
+$background-secondary: #f2f2f2;
+$background-extra: #F4F5F6;
+$background-white: #fff;
+
+$border-default: #ebebeb;
+$border-light: #f2f2f2;
+
+$shadow-default: rgba(170, 170, 170, 0.1);

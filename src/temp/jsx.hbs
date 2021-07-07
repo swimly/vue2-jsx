@@ -1,0 +1,19 @@
+import './{{name}}.css';
+import style from './{{name}}.css.json'
+export default {
+  name: 'm-{{name}}',
+  props: {
+  },
+  methods: {
+    onClick (e) {
+      this.$emit('click', e)
+    }
+  },
+  render (h) {
+    return (
+      <div onClick={this.onClick} class={style['m-{{name}}']}>
+        
+      </div>
+    )
+  }
+}
