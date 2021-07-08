@@ -1,18 +1,20 @@
 import Vue from 'vue'
 import Component from './src/message'
+import pkg from '../../../package.json'
 
 let Constructor = Vue.extend(Component)
 let instance
 
 const wrapdom = () => {
-  let wrap = document.querySelector('.m-message-group') as HTMLElement
+  let wrap = document.querySelector(`.${pkg.prefix}-message-group`) as HTMLElement
   if (!wrap) {
     wrap = document.createElement('div');
-    wrap.className = 'm-message-group'
-    wrap.style.position="absolute"
+    wrap.className = `${pkg.prefix}-message-group`
+    wrap.style.position="fixed"
     wrap.style.top = '5%'
-    wrap.style.left = '0'
-    wrap.style.width = '100%'
+    wrap.style.left = '50%'
+    wrap.style.width = 'auto'
+    wrap.style.transform = `translateX(-50%)`
     wrap.style.zIndex = '1000'
     document.body.appendChild(wrap)
   }

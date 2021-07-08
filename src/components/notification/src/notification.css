@@ -1,4 +1,4 @@
-.m-notification{
+.notification{
   display:block;
   display:none;
   min-height: 0;
@@ -54,30 +54,30 @@
     }
   }
   &[placement*=left]{
-    .m-notification-content{
+    .notification-content{
       left: 0;
       transform: translateX(-100%);
     }
   }
   &[placement*=right]{
-    .m-notification-content{
+    .notification-content{
       right: 0;
       transform: translateX(100%);
     }
   }
   &[placement*=top]{
-    .m-notification-content{
+    .notification-content{
       top:0;
     }
   }
   &[placement*=bottom]{
-    .m-notification-content{
+    .notification-content{
       bottom:0;
     }
   }
   &[visible]{
     opacity:1;
-    .m-notification-content{
+    .notification-content{
       transform: translateX(0);
     }
   }

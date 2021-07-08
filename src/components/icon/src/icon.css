@@ -1,7 +1,8 @@
-.m-icon{
+.icon{
   display:inline-block;
   vertical-align: middle;
   cursor: pointer;
+  transition:0.3s;
   svg{
     width:100%;
     height:100%;

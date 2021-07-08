@@ -1,0 +1,12 @@
+.select-option{
+  padding: 8px 12px;
+  cursor: pointer;
+  transition:0.3s;
+  border-radius:inherit;
+  &[active]{
+    color: v(color-primary);
+  }
+  &:hover{
+    background-color: v(background-extra);
+  }
+}

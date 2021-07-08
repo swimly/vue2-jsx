@@ -1,4 +1,4 @@
-.m-row{
+.row{
   font-size:0;
   &[align=left]{
     text-align: left;

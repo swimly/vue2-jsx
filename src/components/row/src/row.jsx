@@ -41,7 +41,7 @@ export default {
     const {align, valign, type, rowStyle} = this
     return (
       <div
-        class={style['m-row']}
+        class={style['row']}
         align={align}
         valign={valign}
         type={type}

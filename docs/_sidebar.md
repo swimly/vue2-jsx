@@ -1,4 +1,4 @@
-- [组件总览]()
+- [更新日志](docs/update.md)
 - 通用
   - [Button 按钮](src/components/button/README.md)
   - [Row 栅格](src/components/row/README.md)
@@ -8,3 +8,10 @@
   - [Dialog 弹窗提示](src/components/dialog/README.md)
   - [Mask 遮罩](src/components/mask/README.md)
   - [Popover 气泡悬浮框](src/components/popover/README.md)
+  - [Tooltip 文字提示](src/components/tooltip/README.md)
+  - [Popconfirm 气泡确认框](src/components/popconfirm/README.md)
+  - [Checkbox 复选框](src/components/checkbox/README.md)
+  - [Radio 单选框](src/components/radio/README.md)
+  - [Switch 开关](src/components/switch/README.md)
+  - [Input 输入框](src/components/input/README.md)
+  - [Select 下拉框](src/components/select/README.md)

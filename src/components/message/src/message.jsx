@@ -50,15 +50,15 @@ export default {
     const {type} = this
     return (
       <div
-        class={style['m-message']}
+        class={style['message']}
         ref="message"
         type={type}
       >
-        <div class={style['m-message-content']}>
-          <span class={style['m-message-icon']}>
+        <div class={style['message-content']}>
+          <span class={style['message-icon']}>
             {this.renderIcon()}
           </span>
-          <span class={style['m-message-label']}>{this.message}</span>
+          <span class={style['message-label']}>{this.message}</span>
         </div>
       </div>
     )

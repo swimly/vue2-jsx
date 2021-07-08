@@ -35,14 +35,26 @@ export default {
     label: {
       type: String,
       default: ''
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
+  },
+  data () {
+    return {
+      el: null
+    }
+  },
+  mounted () {
+    this.el = this.$refs.el
   },
   methods: {
     onClick (e) {
+      this.el.focus()
       this.$emit('click', e)
     },
     renderIcon () {
-      console.log(this.$slots.icon, this.icon)
       if (this.icon) {
         return (
           <Icon name={this.icon} size="14"/>
@@ -53,19 +65,20 @@ export default {
   render (h) {
     const {type, conner, rounder, outline, plain, text} = this
     return (
-      <div
+      <button
       onClick={this.onClick}
-      class={style['m-button']}
+      class={style['button']}
       type={type}
       conner={conner}
       rounder={rounder}
       outline={outline}
       plain={plain}
       text={text}
+      ref="el"
       >
-        <span class={style['m-button-icon']}>{this.icon ? this.renderIcon() : this.$slots.icon}</span>
-        <span class={style['m-button-label']}>{this.label ? this.label : this.$slots.default}</span>
-      </div>
+        <span class={style['button-icon']}>{this.icon ? this.renderIcon() : this.$slots.icon}</span>
+        <span class={style['button-label']}>{this.label ? this.label : this.$slots.default}</span>
+      </button>
     )
   }
 }

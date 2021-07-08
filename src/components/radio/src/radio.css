@@ -1,0 +1,57 @@
+.radio{
+  display:inline-block;
+  vertical-align: middle;
+  font-size:0;
+  color: v(text-default);
+  position:relative;
+  &-frame{
+    display:inline-block;
+    width: 18px;
+    height: 18px;
+    border:1px solid v(border-default);
+    border-radius:50%;
+    vertical-align: middle;
+    box-sizing: border-box;
+    text-align:center;
+    color: v(text-white);
+    transition:0.3s;
+    &::before{
+      content:"";
+      display:inline-block;
+      width:0;
+      height:100%;
+      vertical-align: middle;
+    }
+    & > * {
+      transform: scale(0);
+      transition:0.3s;
+    }
+  }
+  &-label{
+    font-size: 14px;
+    display:inline-block;
+    vertical-align: middle;
+    &:not(:empty){
+      margin-left: 6px;
+    }
+  }
+  &-core{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    z-index:10;
+    opacity:0;
+    margin:0;
+    &:checked{
+      & ~ .radio-frame{
+        background-color: v(color-primary);
+        border-color: v(color-primary);
+        & > * {
+          transform: scale(1);
+        }
+      }
+    }
+  }
+}

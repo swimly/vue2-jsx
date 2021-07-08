@@ -67,21 +67,21 @@ export default {
     const {title, message, placement} = this
     return (
       <div
-        class={style['m-notification']}
+        class={style['notification']}
         ref="item"
         placement={placement}
       >
         <div
-          class={style['m-notification-content']}
+          class={style['notification-content']}
           ref="content"
         >
-          <div class={style['m-notification-prefix']}>
+          <div class={style['notification-prefix']}>
             {this.renderIcon()}
           </div>
-          <div class={style['m-notification-view']}>
-            <div class={style['m-notification-close']}>{this.renderClose()}</div>
-            <h2 class={style['m-notification-title']}>{title}</h2>
-            <p class={style['m-notification-label']}>{message}</p>
+          <div class={style['notification-view']}>
+            <div class={style['notification-close']}>{this.renderClose()}</div>
+            <h2 class={style['notification-title']}>{title}</h2>
+            <p class={style['notification-label']}>{message}</p>
           </div>
         </div>
       </div>

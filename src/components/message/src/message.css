@@ -1,4 +1,4 @@
-.m-message{
+.message{
   display:block;
   text-align:center;
   position:relative;
@@ -43,28 +43,28 @@
   }
   &[visible]{
     min-height: 58px;
-    .m-message-content{
+    .message-content{
       transform: translate(-50%, 0);
       opacity:1;
     }
   }
   &[type=primary]{
-    .m-message-icon{
+    .message-icon{
       color: v(color-primary);
     }
   }
   &[type=success]{
-    .m-message-icon{
+    .message-icon{
       color: v(color-success);
     }
   }
   &[type=error]{
-    .m-message-icon{
+    .message-icon{
       color: v(color-danger);
     }
   }
   &[type=warning]{
-    .m-message-icon{
+    .message-icon{
       color: v(color-warning);
     }
   }

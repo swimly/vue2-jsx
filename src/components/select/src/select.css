@@ -1,0 +1,7 @@
+.select{
+  position:relative;
+  z-index:100;
+  padding: 8px;
+  box-sizing: border-box;
+  border-radius:inherit;
+}

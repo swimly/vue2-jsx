@@ -44,13 +44,15 @@ export default {
     hide () {
       this.el.removeAttribute('visible')
       setTimeout(() => {
-        this.el.parentNode.removeChild(this.el)
+        if (this.el.parentNode && this.el) {
+          this.el.parentNode.removeChild(this.el)
+        }
       }, 300)
     },
     renderLoading () {
       if (!this.loading) return 
       return (
-        <div class={style['m-mask-loading']}>
+        <div class={style['mask-loading']}>
           <Icon size="32" name="loading" spin/>
           <p>
             {this.content ? this.content : this.$slots.default}
@@ -63,7 +65,7 @@ export default {
     return (
       <div
         onClick={this.onClick}
-        class={style['m-mask']}
+        class={style['mask']}
         ref="el"
         style={this.style}
       >

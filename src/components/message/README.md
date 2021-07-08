@@ -95,7 +95,7 @@
       notice4: function () {
         this.$message.show({
           message: 'This is a prompt message for success, and it will disappear in 10 seconds',
-          duration: 10000
+          duration: 100000
         })
       }
     }

@@ -1,51 +1,162 @@
-.m-popover{
+.popover{
   display:inline-block;
+  &-title{
+    &:empty{
+      display:none;
+    }
+    font-size: 16px;
+    margin:0 0 12px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid v(border-light);
+  }
+  &-content{
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  &-arrow{
+    display:inline-block;
+    width: 12px;
+    height: 12px;
+    background: inherit;
+    position:absolute;
+    transform-origin: center center;
+  }
   &-panel{
     display:inline-block;
     background-color: v(background-white);
-    box-shadow: 0 3px 6px -4px v(shadow-default), 0 6px 16px v(shadow-default), 0 9px 28px 8px v(shadow-default);
-    padding: 12px;
+    box-shadow: 0 3px 6px -4px v(shadow-default), 0 6px 16px v(shadow-default), 0 -9px 28px 8px v(shadow-default);
     box-sizing: border-box;
     border-radius: 4px;
     position:absolute;
     display:none;
     transition: 0.3s;
     opacity:0;
-    &[placement=left-top]{
-      margin: 8px 0 0 -8px;
+    &[type=dark]{
+      background-color: v(background-black);
+      color: v(text-white);
     }
-    &[placement=left]{
-      margin: 0 0 0 -8px;
+    &[type=primary]{
+      background-color: v(color-primary);
+      color: v(text-white);
     }
-    &[placement=left-bottom]{
-      margin: -8px 0 0 -8px;
+    &[type=warning]{
+      background-color: v(color-warning);
+      color: v(text-white);
+    }
+    &[type=success]{
+      background-color: v(color-success);
+      color: v(text-white);
+    }
+    &[type=danger]{
+      background-color: v(color-danger);
+      color: v(text-white);
+    }
+    &[placement^=left]{
+      margin: 0 0 0 -12px;
+      box-shadow: 3px 3px 6px -4px v(shadow-default), 6px 6px 16px v(shadow-default), 9px -9px 28px 8px v(shadow-default);
+      .popover-arrow{
+        transform: rotate(-45deg);
+        box-shadow: 3px 3px 6px v(border-default);
+      }
+    }
+    &[placement^=right]{
+      margin: 0 0 0 12px;
+      box-shadow: -3px 3px 6px -4px v(shadow-default), -6px 6px 16px v(shadow-default), -9px 9px 28px 8px v(shadow-default);
+      .popover-arrow{
+        transform: rotate(-45deg);
+        box-shadow: -3px -3px 6px v(border-default);
+      }
+    }
+    &[placement^=top]{
+      margin: -12px 0 0 0;
+      .popover-arrow{
+        transform: rotate(-45deg);
+        box-shadow: -3px 3px 6px v(border-default);
+      }
+    }
+    &[placement^=bottom]{
+      margin: 12px 0 0 0;
+      box-shadow: 0 -3px 6px -4px v(shadow-default), 0 -6px 16px v(shadow-default), 0 9px 28px 8px v(shadow-default);
+      .popover-arrow{
+        transform: rotate(-45deg);
+        box-shadow: 3px -3px 6px v(border-default);
+      }
     }
     &[placement=bottom-left]{
-      margin: 8px 0 0 8px;
+      .popover-arrow{
+        left: 12px;
+        top:-5px;
+      }
     }
     &[placement=bottom]{
-      margin: 8px 0 0 0;
+      .popover-arrow{
+        left: 50%;
+        margin-left: -6px;
+        top:-5px;
+      }
     }
     &[placement=bottom-right]{
-      margin: 8px 0 0 -8px;
-    }
-    &[placement=right-top]{
-      margin: 8px 0 0 8px;
-    }
-    &[placement=right]{
-      margin: 0 0 0 8px;
-    }
-    &[placement=right-bottom]{
-      margin: -8px 0 0 8px;
+      .popover-arrow{
+        right: 12px;
+        top:-5px;
+      }
     }
     &[placement=top-left]{
-      margin: -8px 0 0 8px;
+      .popover-arrow{
+        left: 12px;
+        bottom:-5px;
+      }
     }
     &[placement=top]{
-      margin: -8px 0 0 0;
+      .popover-arrow{
+        left: 50%;
+        margin-left:-6px;
+        bottom:-5px;
+      }
     }
     &[placement=top-right]{
-      margin: -8px 0 0 -8px;
+      .popover-arrow{
+        right: 12px;
+        bottom:-5px;
+      }
+    }
+    &[placement=left-top]{
+      .popover-arrow{
+        top: 12px;
+        right:-5px;
+      }
+    }
+    &[placement=left]{
+      .popover-arrow{
+        top: 50%;
+        margin-top: -6px;
+        right:-5px;
+      }
+    }
+    &[placement=left-bottom]{
+      .popover-arrow{
+        bottom: 12px;
+        right:-5px;
+      }
+    }
+    &[placement=right-top]{
+      .popover-arrow{
+        top: 12px;
+        left:-5px;
+      }
+    }
+    &[placement=right]{
+      .popover-arrow{
+        top: 50%;
+        margin-top: -6px;
+        left:-5px;
+      }
+    }
+    &[placement=right-bottom]{
+      .popover-arrow{
+        bottom: 12px;
+        left:-5px;
+      }
     }
     &[visible]{
       opacity:1;

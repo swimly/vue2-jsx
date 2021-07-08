@@ -8,7 +8,7 @@ module.exports = (isDev) => {
         files: ['variable.css']
       }),
       require('postcss-modules')({
-        generateScopedName: pkg.cssmodule ? "[local]_[hash:base64:5]" : "[local]"
+        generateScopedName: pkg.cssmodule ? pkg.prefix + "-[local]_[hash:base64:5]" : pkg.prefix + "-[local]"
       }),
       require('postcss-import')(),
       require('postcss-nested')(),

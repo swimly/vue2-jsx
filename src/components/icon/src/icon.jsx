@@ -38,7 +38,7 @@ export default {
     return (
       <div
         onClick={this.onClick}
-        class={style['m-icon']}
+        class={style['icon']}
         spin={spin}
         type={type}
         style={{

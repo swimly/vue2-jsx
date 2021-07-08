@@ -27,7 +27,7 @@ export default {
     const {valign, colWidth} = this
     return (
       <div
-        class={style['m-col']}
+        class={style['col']}
         valign={valign}
         style={colWidth}
       >

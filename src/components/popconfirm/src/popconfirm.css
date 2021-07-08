@@ -1,0 +1,33 @@
+.popconfirm{
+  display:inline-block;
+  min-width: 240px;
+  &-content{
+    display:table;
+    width:100%;
+    padding: 12px 0 24px 0;
+  }
+  &-icon,
+  &-label{
+    display:table-cell;
+    vertical-align: top;
+    font-size:0;
+  }
+  &-label{
+    width:100%;
+    p{
+      line-height:20px;
+      margin:0;
+      font-size: 14px;
+      margin-left: 12px;
+    }
+  }
+  &-icon{
+    white-space: nowrap;
+  }
+  &-footer{
+    text-align:right;
+    & > *{
+      margin-left: 12px;
+    }
+  }
+}

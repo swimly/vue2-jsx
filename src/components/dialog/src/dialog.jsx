@@ -66,7 +66,7 @@ export default {
     renderButton () {
       if (!this.buttons) return
       return (
-        <div class={style['m-dialog-footer']}>
+        <div class={style['dialog-footer']}>
           {
             this.buttons.map(item => {
               return (
@@ -83,14 +83,14 @@ export default {
   },
   render (h) {
     return (
-      <div onClick={this.onClick} class={style['m-dialog']} ref="el" effect={this.effect}>
-        <div class={style['m-dialog-head']}>
-          <h2 class={style['m-dialog-title']}>{this.title}</h2>
-          <div class={style['m-dialog-area']}>
+      <div onClick={this.onClick} class={style['dialog']} ref="el" effect={this.effect}>
+        <div class={style['dialog-head']}>
+          <h2 class={style['dialog-title']}>{this.title}</h2>
+          <div class={style['dialog-area']}>
             {this.renderArea()}
           </div>
         </div>
-        <div class={style['m-dialog-content']}>{this.content}</div>
+        <div class={style['dialog-content']}>{this.content}</div>
         {this.renderButton()}
       </div>
     )

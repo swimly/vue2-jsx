@@ -156,6 +156,22 @@
 
 <!-- start -->
 
+### 加载
+
+<div class="code">
+  <p>{{loading}}</p>
+  <m-button :loading="loading" @click="onClick" conner>圆角按钮</m-button>
+</div>
+
+``` html
+<m-button conner>圆角按钮</m-button>
+<m-button rounder>圆弧按钮</m-button>
+```
+
+<!-- end -->
+
+<!-- start -->
+
 ### 属性
 
 |属性名称|描述<div style="width:160px;"></div>|可选值<div style="width:100px;"></div>|可选值<div style="width:40px;"></div>|
@@ -185,7 +201,17 @@
   var previews = document.querySelectorAll('.code')
   for (var i = 0; i < previews.length; i++) {
     new Vue({
-      el: previews[i]
+      el: previews[i],
+      data: function () {
+        return {
+          loading: false
+        }
+      },
+      methods: {
+        onClick: function () {
+          this.loading = !this.loading
+        }
+      }
     })
   }
 </script>
