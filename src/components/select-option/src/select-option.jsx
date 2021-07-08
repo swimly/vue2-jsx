@@ -20,11 +20,8 @@ export default {
   },
   methods: {
     onClick (e) {
-      this.$emit('click', e)
+      this.$parent.onClick(this.value)
     }
-  },
-  mounted () {
-    console.log(this.share.value)
   },
   render (h) {
     return (

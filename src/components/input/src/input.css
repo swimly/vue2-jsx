@@ -74,4 +74,15 @@
       opacity:1;
     }
   }
+  &-tag{
+    font-size:0;
+    display:inline-block;
+    span{
+      font-size: 14px;
+      border:1px solid v(border-default);
+      padding: 2px 4px;
+      border-radius:2px;
+      margin-right: 4px;
+    }
+  }
 }

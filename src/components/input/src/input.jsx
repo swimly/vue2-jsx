@@ -41,7 +41,7 @@ export default {
       default: false
     },
     value: {
-      type: String,
+      type: String | Array,
       default: ''
     },
     maxLength: {
@@ -111,6 +111,36 @@ export default {
     },
     rotate (name, rotate) {
       this['$'+`${name}`].setAttribute('rotate', `${rotate}`)
+    },
+    onValueChange (v) {
+      this.content = v
+    },
+    renderContent () {
+      let {type, placeholder, content, onChange, maxLength} = this
+      if (typeof content === 'string') {
+        return (
+          <input
+            type={type}
+            class={style['input-core']}
+            placeholder={placeholder}
+            value={content}
+            onInput={onChange}
+            maxLength={maxLength ? maxLength : ''}
+          />
+        )
+      } else {
+        return (
+          <div class={style['input-tag']}>
+            {
+              content.map((item) => {
+                return (
+                  <span>{item}</span>
+                )
+              })
+            }
+          </div>
+        )
+      }
     }
   },
   mounted () {
@@ -119,9 +149,10 @@ export default {
     this.$suffix = this.$refs.suffix
   },
   watch: {
+    'value': 'onValueChange'
   },
   render (h) {
-    const {type, placeholder, prefixColor, suffixColor, content, onChange, maxLength} = this
+    const {prefixColor, suffixColor} = this
     return (
       <div onClick={this.onClick} class={style['input']}>
         <div
@@ -137,14 +168,7 @@ export default {
           class={style['input-content']}
           ref="content"
         >
-          <input
-            type={type}
-            class={style['input-core']}
-            placeholder={placeholder}
-            value={content}
-            onInput={onChange}
-            maxLength={maxLength ? maxLength : ''}
-          />
+          {this.renderContent()}
         </div>
         <div
           class={style['input-suffix']}

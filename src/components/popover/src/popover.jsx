@@ -110,7 +110,6 @@ export default {
   },
   methods: {
     initEvent (e) {
-      this.$emit('click', e)
       this.init()
       this.show()
     },
@@ -168,6 +167,9 @@ export default {
       this.$parent.appendChild(this.$wrap)
       this.oft = $.offset(this.$handle)
       this.pos = this.$handle.getBoundingClientRect()
+    },
+    onClick (data) {
+      this.$emit('click', data)
     }
   },
   mounted () {

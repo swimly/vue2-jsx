@@ -11,8 +11,10 @@ export default {
   },
   props: {
     value: {
-      type: String | Array,
-      default: ''
+      type: Array | String,
+      default () {
+        return ''
+      }
     },
     multiple: {
       type: Boolean,
@@ -30,6 +32,20 @@ export default {
     onClose () {
       this.$handle.blur()
       this.$handle.rotate('suffix', 0)
+    },
+    setValue (value) {
+      if (!this.multiple) {
+        this.share.value = value
+      } else {
+        const index = this.share.value.indexOf(value)
+        if (index >= 0) {
+          this.share.value.splice(index, 1)
+        } else {
+          this.share.value.push(value)
+        }
+      }
+      this.$emit('input', this.share.value)
+      this.$emit('change', this.share.value)
     }
   },
   data () {
@@ -38,7 +54,8 @@ export default {
       $pop: null,
       width: 0,
       share: {
-        value: this.value
+        value: this.value,
+        multiple: this.multiple
       }
     }
   },
@@ -49,6 +66,10 @@ export default {
       this.width = this.$handle.$el.offsetWidth
     })
   },
+  computed: {
+  },
+  created () {
+  },
   render (h) {
     return (
       <Popover
@@ -56,8 +77,9 @@ export default {
         ref="pop"
         onOpen={this.onOpen}
         onClose={this.onClose}
+        onClick={this.setValue}
       >
-        <Input suffixIcon="arrow-down" ref="handle"/>
+        <Input value={this.share.value} suffixIcon="arrow-down" ref="handle"/>
         <div
           class={style['select']}
           slot="content"
