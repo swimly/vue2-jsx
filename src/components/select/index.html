@@ -9,14 +9,25 @@
 </head>
 <body>
   <div id="app">
-    <m-select type="primary">按钮</m-select>
+    <div style="width: 300px;">
+      <m-select v-model="select">
+        <m-select-option value="向日葵">向日葵</m-select-option>
+        <m-select-option value="西瓜">西瓜</m-select-option>
+        <m-select-option value="百合">百合</m-select-option>
+        <m-select-option value="栀子花">栀子花</m-select-option>
+      </m-select>
+    </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="../../../dist/mui.js"></script>
   <script>
-    Vue.use(MUI)
     new Vue({
-      el: '#app'
+      el: '#app',
+      data: function () {
+        return {
+          select: '西瓜'
+        }
+      }
     })
   </script>
 </body>

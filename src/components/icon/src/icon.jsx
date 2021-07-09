@@ -36,7 +36,7 @@ export default {
   render (h) {
     const {size, color, spin, type} = this
     return (
-      <div
+      <span
         onClick={this.onClick}
         class={style['icon']}
         spin={spin}
@@ -50,7 +50,7 @@ export default {
         <svg aria-hidden="true" fill="currentColor">
           <use ref="use"></use>
         </svg>
-      </div>
+      </span>
     )
   }
 }

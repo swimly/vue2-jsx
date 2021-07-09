@@ -1,6 +1,7 @@
 import './input.css';
 import style from './input.css.json'
 import Icon from '../../icon/src/icon'
+import Tag from '../../tag/src/tag'
 export default {
   name: 'm-input',
   props: {
@@ -134,13 +135,19 @@ export default {
             {
               content.map((item) => {
                 return (
-                  <span>{item}</span>
+                  <Tag onClose={this.onClose.bind(this, item)} size={24} allow-close={true}>{item}</Tag>
                 )
               })
             }
           </div>
         )
       }
+    },
+    onClose (item) {
+      const index = this.value.indexOf(item)
+      this.value.splice(index, 1)
+      this.$emit('input', this.value)
+      this.$emit('change', this.value)
     }
   },
   mounted () {
@@ -154,7 +161,12 @@ export default {
   render (h) {
     const {prefixColor, suffixColor} = this
     return (
-      <div onClick={this.onClick} class={style['input']}>
+      <div
+        onFocus={this.focus}
+        onBlur={this.blur}
+        class={style['input']}
+        tabIndex="1"
+      >
         <div
           class={style['input-prefix']}
           ref="prefix"

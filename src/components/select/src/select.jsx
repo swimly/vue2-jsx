@@ -2,6 +2,7 @@ import './select.css';
 import style from './select.css.json'
 import Popover from '../../popover/src/popover'
 import Input from '../../input/src/input'
+import Scroller from '../../scroller/src/scroller'
 export default {
   name: 'm-select',
   provide () {
@@ -19,6 +20,10 @@ export default {
     multiple: {
       type: Boolean,
       default: false
+    },
+    height: {
+      type: Number,
+      default: 140
     }
   },
   methods: {
@@ -67,27 +72,33 @@ export default {
     })
   },
   computed: {
+    trigger () {
+      return this.multiple ? 'click' : 'focus'
+    }
   },
   created () {
   },
   render (h) {
     return (
       <Popover
+        trigger={this.trigger}
         padding={0}
         ref="pop"
         onOpen={this.onOpen}
         onClose={this.onClose}
-        onClick={this.setValue}
       >
         <Input value={this.share.value} suffixIcon="arrow-down" ref="handle"/>
         <div
           class={style['select']}
           slot="content"
           style={{
-            width: `${this.width}px`
+            width: `${this.width}px`,
+            height: `${this.height}px`
           }}
         >
-          {this.$slots.default}
+          <Scroller onClick={this.setValue}>
+            {this.$slots.default}
+          </Scroller>
         </div>
       </Popover>
     )

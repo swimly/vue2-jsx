@@ -20,6 +20,7 @@ export default {
   },
   methods: {
     onClick (e) {
+      console.log(this.$parent)
       this.$parent.onClick(this.value)
     }
   },

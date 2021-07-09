@@ -13,6 +13,12 @@ import MSwitch from './components/switch/src/switch'
 import MInput from './components/input/src/input'
 import MSelect from './components/select/src/select'
 import MSelectOption from './components/select-option/src/select-option'
+import MTag from './components/tag/src/tag'
+import MScroller from './components/scroller/src/scroller'
+import MTab from './components/tab/src/tab'
+import MTabItem from './components/tab-item/src/tab-item'
+import MPagination from './components/pagination/src/pagination'
+import MDatePicker from './components/date-picker/src/date-picker'
 
 import Message from './components/message/index'
 import Notification from './components/notification/index'
@@ -21,6 +27,12 @@ import Mask from './components/mask/index'
 import Popover from './components/popover/index'
 
 const components = [
+  MDatePicker,
+  MPagination,
+  MTab,
+  MTabItem,
+  MTag,
+  MScroller,
   MSelect,
   MSelectOption,
   MInput,

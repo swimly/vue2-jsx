@@ -1,0 +1,65 @@
+.tag{
+  display:inline-block;
+  vertical-align: middle;
+  border:1px solid v(border-default);
+  background-color: v(border-default);
+  height: 32px;
+  font-size:0;
+  padding: 0 12px;
+  min-width: 60px;
+  box-sizing: border-box;
+  text-align:center;
+  border-radius:2px;
+  user-select: none;
+  &:before{
+    content:"";
+    display:inline-block;
+    width:0;
+    height: 100%;
+    vertical-align: middle;
+  }
+  &-label{
+    display:inline-block;
+    vertical-align: middle;
+    line-height:1;
+    font-size: 14px;
+    & + * {
+      margin-left: 6px;
+    }
+  }
+  &[outline]{
+    background-color: v(background-white) !important;
+  }
+  &[type=primary]{
+    background-color: v(color-primary);
+    border-color: v(color-primary);
+    color: v(text-white);
+    &[outline]{
+      color: v(color-primary);
+    }
+  }
+  &[type=warning]{
+    background-color: v(color-warning);
+    border-color: v(color-warning);
+    color: v(text-white);
+    &[outline]{
+      color: v(color-warning);
+    }
+  }
+  &[type=success]{
+    background-color: v(color-success);
+    border-color: v(color-success);
+    color: v(text-white);
+    &[outline]{
+      color: v(color-success);
+    }
+  }
+  &[type=danger]{
+    background-color: v(color-danger);
+    border-color: v(color-danger);
+    color: v(text-white);
+    &[outline]{
+      color: v(color-danger);
+    }
+  }
+}

@@ -76,6 +76,7 @@
   },
   "dependencies": {
     "component-classes": "^1.2.6",
+    "date-fns": "^2.22.1",
     "element-resize-detector": "^1.2.3",
     "vue": "^2.6.14"
   }

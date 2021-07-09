@@ -31,5 +31,6 @@ const hide = () => {
 export default {
   show,
   loading,
-  hide
+  hide,
+  instance
 }

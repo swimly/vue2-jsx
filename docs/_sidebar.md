@@ -15,3 +15,8 @@
   - [Switch 开关](src/components/switch/README.md)
   - [Input 输入框](src/components/input/README.md)
   - [Select 下拉框](src/components/select/README.md)
+  - [Tag 标签](src/components/tag/README.md)
+  - [Scroller 滚动条](src/components/scroller/README.md)
+  - [Tab 标签页](src/components/tab/README.md)
+  - [Pagination 分页](src/components/pagination/README.md)
+  - [DatePicker 日期选择](src/components/date-picker/README.md)

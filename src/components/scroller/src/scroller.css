@@ -1,0 +1,34 @@
+.scroller{
+  width:100%;
+  height:100%;
+  position:relative;
+  overflow:hidden;
+  &-content{
+    position:absolute;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    overflow:scroll;
+    scroll-behavior: smooth;
+  }
+  &-bar{
+    display:inline-block;
+    background-color: v(background-black);
+    position:absolute;
+    border-radius: 4px;
+    opacity:0.6;
+    &[type=y]{
+      width: 4px;
+      height: 100%;
+      top:0;
+      right:0;
+    }
+    &[type=x]{
+      height: 4px;
+      width: 100%;
+      bottom:0;
+      left:0;
+    }
+  }
+}

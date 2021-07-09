@@ -132,7 +132,7 @@ export default {
       }, 20)
     },
     hide () {
-      if (this.$mask) {
+      if (this.$mask.$el) {
         this.$mask.hide()
       }
       this.$content.removeAttribute('visible')
@@ -144,7 +144,7 @@ export default {
     getOffsetParent (el) {
       const parent = el.parentNode
       const overflow = this.getStyle(parent, 'overflow')
-      if (overflow !== 'auto') {
+      if (overflow !== 'auto' && parent.tagName !== 'BODY') {
         this.getOffsetParent(parent)
       } else {
         this.$parent = parent

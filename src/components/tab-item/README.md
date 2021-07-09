@@ -1,11 +1,11 @@
-# Pagination 分页
+# TabItem
 
 <!-- start -->
 
 ### 基础
 
 <div class="code">
-  <m-pagination></m-pagination>
+  <m-tab-item>title</m-tab-item>
 </div>
 
 <!-- end -->

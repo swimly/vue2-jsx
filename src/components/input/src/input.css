@@ -77,12 +77,16 @@
   &-tag{
     font-size:0;
     display:inline-block;
-    span{
-      font-size: 14px;
+    &-item{
       border:1px solid v(border-default);
       padding: 2px 4px;
       border-radius:2px;
       margin-right: 4px;
+      span{
+        display:inline-block;
+        vertical-align: middle;
+        font-size: 14px;
+      }
     }
   }
 }

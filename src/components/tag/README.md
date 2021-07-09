@@ -1,16 +1,11 @@
-<style>
-  .mc-input{
-    margin: 20px 0;
-  }
-</style>
-# Input
+# Tag
 
 <!-- start -->
 
 ### 基础
 
 <div class="code">
-  <m-input></m-input>
+  <m-tag>title</m-tag>
 </div>
 
 <!-- end -->
@@ -20,7 +15,7 @@
 ### 基础
 
 <div class="code">
-  <m-input v-model="v1" suffix-icon="arrow-down"></m-input>
+  <m-tag :allow-close="true">标签</m-tag>
 </div>
 
 <!-- end -->
@@ -30,16 +25,10 @@
 ### 基础
 
 <div class="code">
-  <m-input prefix-icon="date"></m-input>
-  <m-input prefix-label="日期"></m-input>
-  <m-input>
-    <span slot="prefix">哈哈哈</span>
-  </m-input>
-  <m-input suffix-icon="date"></m-input>
-  <m-input suffix-label="发送验证码" suffix-color="#f00"></m-input>
-  <m-input>
-    <span slot="suffix">哈哈哈</span>
-  </m-input>
+  <m-tag type="primary">标签</m-tag>
+  <m-tag type="warning">标签</m-tag>
+  <m-tag type="success">标签</m-tag>
+  <m-tag type="danger">标签</m-tag>
 </div>
 
 <!-- end -->
@@ -49,7 +38,11 @@
 ### 基础
 
 <div class="code">
-  <m-input :allow-clear="true"></m-input>
+<m-tag outline>标签</m-tag>
+  <m-tag type="primary" outline>标签</m-tag>
+  <m-tag type="warning" outline>标签</m-tag>
+  <m-tag type="success" outline>标签</m-tag>
+  <m-tag type="danger" outline>标签</m-tag>
 </div>
 
 <!-- end -->
@@ -59,7 +52,9 @@
 ### 基础
 
 <div class="code">
-  <m-input :max-length="8"></m-input>
+  <m-tag :size="28">标签</m-tag>
+  <m-tag :size="24">标签</m-tag>
+  <m-tag :size="20">标签</m-tag>
 </div>
 
 <!-- end -->
@@ -78,12 +73,7 @@
   var previews = document.querySelectorAll('.code')
   for (var i = 0; i < previews.length; i++) {
     new Vue({
-      el: previews[i],
-      data: function () {
-        return {
-          v1: ['44', '342312']
-        }
-      }
+      el: previews[i]
     })
   }
 </script>
