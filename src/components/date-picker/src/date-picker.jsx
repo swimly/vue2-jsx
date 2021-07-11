@@ -4,8 +4,7 @@ import Popover from '../../popover/src/popover'
 import Icon from '../../icon/src/icon'
 import Input from '../../input/src/input'
 import D from '../../../utils/date'
-import {format, addYears, addMonths, getYear, getMonth, subMonths} from 'date-fns'
-import { subYears } from 'date-fns/esm';
+import {format, addYears, addMonths, getYear, getMonth, subMonths, eachWeekOfInterval, subYears} from 'date-fns'
 export default {
   name: 'm-date-picker',
   props: {
@@ -35,6 +34,7 @@ export default {
   data () {
     return {
       dft: this.value,
+      base: null,
       current: null,
       dataArray: []
     }
@@ -78,6 +78,7 @@ export default {
         this.current[idx] = nv
         this.$forceUpdate()
       })
+      this.getDataArray()
     },
     onNextMonth (index) {
       const {type, current, fmt} = this
@@ -86,6 +87,7 @@ export default {
         this.current[idx] = nv
         this.$forceUpdate()
       })
+      this.getDataArray()
     },
     onNextYear (index) {
       let {type, current, fmt} = this
@@ -103,6 +105,7 @@ export default {
       this.getDataArray()
     },
     renderPrevYear (index) {
+      if (this.type === 'time') return
       return (
         <Icon onClick={this.onPrevYear.bind(this, index)} size="14" name="arrow-prev"/>
       )
@@ -114,12 +117,13 @@ export default {
       )
     },
     renderNextMonth (index) {
-      if (this.type.indexOf('date') < 0) return
+      if (this.type.indexOf('date') < 0 && this.type.indexOf('week') < 0) return
       return (
         <Icon onClick={this.onNextMonth.bind(this, index)} size="14" name="arrow-right"/>
       )
     },
     renderNextYear (index) {
+      if (this.type === 'time') return
       return (
         <Icon onClick={this.onNextYear.bind(this, index)} size="14" name="arrow-next"/>
       )
@@ -134,6 +138,18 @@ export default {
             <Icon name="caret-down" size="10"/>
           </p>
         )
+      } else if (this.type === 'week') {
+        return (
+          <p class={style['date-head-item']}>
+            <span class={style['date-head-label']}>{year}年</span>
+          </p>
+        )
+      } else if (this.type === 'time') {
+        return (
+          <p class={style['date-head-item']}>
+            <span class={style['date-head-label']}>请选择时间</span>
+          </p>
+        )
       } else {
         return (
           <p class={style['date-head-item']}>
@@ -144,7 +160,7 @@ export default {
       }
     },
     renderHeadMonth (month, index) {
-      if (this.type === 'month') return
+      if (this.type === 'month' || this.type === 'time' || this.type === 'quart') return
       if (this.type === 'year') {
         let end = this.dataArray[index]
         end = format(end[end.length - 1], 'yyyy')
@@ -152,6 +168,12 @@ export default {
           <p class={style['date-head-item']}>
             <span class={style['date-head-label']}>{end >= 10 ? end : `0${end}`}月</span>
             <Icon name="caret-down" size="10"/>
+          </p>
+        )
+      } else if (this.type === 'week') {
+        return (
+          <p class={style['date-head-item']}>
+            <span class={style['date-head-label']}>{5}周</span>
           </p>
         )
       } else {
@@ -164,9 +186,12 @@ export default {
       }
     },
     renderHead (index) {
-      const date = new Date(this.current[index])
-      const year = getYear(date)
-      const month = getMonth(date) + 1
+      let date = new Date(this.current[index])
+      if (this.type === 'week') {
+        date = this.parseWeekToDate(this.current[index])
+      }
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
       return (
         <div class={style['date-head']}>
           <div class={style['date-head-prefix']}>
@@ -184,18 +209,98 @@ export default {
         </div>
       )
     },
+    renderMonthDay (index) {
+      const {dataArray} = this
+      return (
+        <div class={style['date-month']}>
+          {
+            dataArray[index].map((week, idx) => {
+              return (
+                <ul class={style['date-week']}>
+                  {
+                    week.map((item, index) => {
+                      const date = new Date(item)
+                      const day = date.getDate()
+                      return (
+                        <li class={style['date-item']}>
+                          <div class={style['date-day']}>
+                            <p class={style['date-value']}>{day}</p>
+                          </div>
+                        </li>
+                      )
+                    })
+                  }
+                </ul>
+              )
+            })
+          }
+        </div>
+      )
+    },
+    renderYear (index) {
+      const {dataArray} = this
+      return (
+        <ul class={style['date-list']}>
+          {
+            dataArray[index].map((item) => {
+              const date = new Date(item)
+              const year  = date.getFullYear()
+              return (
+                <li>
+                  <p>{year}年</p>
+                </li>
+              )
+            })
+          }
+        </ul>
+      )
+    },
+    renderMonth (index) {
+      const {dataArray} = this
+      return (
+        <ul class={style['date-list']}>
+          {
+            dataArray[index].map((item) => {
+              const date = new Date(item)
+              const month  = date.getMonth() + 1
+              return (
+                <li>
+                  <p>{month}月</p>
+                </li>
+              )
+            })
+          }
+        </ul>
+      )
+    },
+    renderWeek (index) {
+      const {dataArray} = this
+      console.log(dataArray)
+    },
+    renderContent (index) {
+      const {type} = this
+      if (type.indexOf('date') >= 0) {
+        return this.renderMonthDay(index)
+      } else if (type === 'year') {
+        return this.renderYear(index)
+      } else if (type === 'month') {
+        return this.renderMonth(index)
+      } else if (type === 'week') {
+        return this.renderWeek(index)
+      }
+    },
     renderCore () {
       const {dataArray} = this
       return dataArray.map((data, i) => {
         return (
           <div class={style['date-panel']}>
             {this.renderHead(i)}
+            {this.renderContent(i)}
           </div>
         )
       })
     },
     getDataArray () {
-      console.log('current改变了')
       let array = []
       const {current, type} = this
       current.forEach(item => {
@@ -203,7 +308,6 @@ export default {
         if (type.indexOf('date') >= 0) {
           data = D.thisFullMonthDays(new Date(item))        
         } else if (type === 'year') {
-          console.log(item)
           data = D.latest15Years(new Date(item))
         } else if (type === 'month') {
           data = D.thisYearMonths(new Date(item))
@@ -218,6 +322,30 @@ export default {
       })
       this.dataArray = array
     },
+    getDefault (d) {
+      const {type, fmt} = this
+      let date
+      if (type.indexOf('date') >= 0) {
+        date = new Date(d)
+      } else if (type === 'year') {
+        date = new Date(`${d}/1/1`)
+      } else if (type === 'month') {
+        date = new Date(`${date}/1`)
+      } else if (type === 'week') {
+        this.parseWeekToDate(d)
+      }
+      if (!date) return
+      this.base = format(date, fmt[type])
+    },
+    parseWeekToDate (d) {
+      const year = d.substring(0, 4)
+      const idx = parseInt(d.split('/')[1])
+      const arr = eachWeekOfInterval({
+        start: new Date(`${year}/1/1`),
+        end: new Date(`${year}/12/30`)
+      })
+      return arr[idx]
+    },
     getCurrent () {
       const {type, dft, range, fmt} = this
       let current = null
@@ -227,9 +355,11 @@ export default {
         } else {
           current = dft[0]
         }
+        this.getDefault(dft)
       } else {
         const date = new Date()
         current = format(date, fmt[type])
+        this.base = current
       }
       if (range) {
         let next = null
