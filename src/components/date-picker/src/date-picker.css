@@ -2,7 +2,6 @@
   white-space: nowrap;
   user-select: none;
   display:inline-block;
-  border:1px solid #f00;
   box-sizing: border-box;
   &-panel{
     display: inline-block;
@@ -21,6 +20,8 @@
     height: 44px;
     font-size: 16px;
     user-select: none;
+    padding: 0 12px;
+    box-sizing:border-box;
     &-prefix,
     &-content,
     &-suffix{
@@ -30,6 +31,11 @@
     &-prefix,
     &-suffix{
       white-space: nowrap;
+      span{
+        &:hover{
+          color: v(color-primary);
+        }
+      }
     }
     &-content{
       width:100%;
@@ -56,11 +62,18 @@
         margin:0 2px;
       }
       span{
+        transition: 0.3s;
         &:last-child{
           display:none;
+          color: v(text-placeholder);
           &[visible]{
             display:inline-block;
           }
+        }
+      }
+      &:hover{
+        span{
+          color: v(color-primary);
         }
       }
     }
@@ -78,7 +91,7 @@
     li{
       display:table-cell;
       vertical-align: middle;
-      font-size: 14px;
+      font-size: 12px;
       color: v(text-secondary);
       text-align:center;
     }

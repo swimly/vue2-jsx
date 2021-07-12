@@ -115,6 +115,7 @@ export default {
     },
     onValueChange (v) {
       this.content = v
+      this.$forceUpdate()
     },
     renderContent () {
       let {type, placeholder, content, onChange, maxLength} = this
@@ -130,6 +131,7 @@ export default {
           />
         )
       } else {
+        if (content === null) return
         return (
           <div class={style['input-tag']}>
             {

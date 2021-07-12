@@ -38,9 +38,13 @@ export default {
     },
     allowFooter: {
       type: Boolean,
-      default: true
+      default: false
     },
     mutiple: {
+      type: Boolean,
+      default: false
+    },
+    static: {
       type: Boolean,
       default: false
     }
@@ -52,7 +56,8 @@ export default {
       selectValue: null,
       dataArray: [],
       hasValue: false,
-      canhover: true
+      canhover: true,
+      $pop: null
     }
   },
   computed: {
@@ -139,25 +144,25 @@ export default {
     renderPrevYear (index) {
       if (this.type === 'time') return
       return (
-        <Icon onClick={this.onPrevYear.bind(this, index)} size="14" name="arrow-prev"/>
+        <Icon onClick={this.onPrevYear.bind(this, index)} size="12" name="arrow-prev"/>
       )
     },
     renderPrevMonth (index) {
       if (this.type.indexOf('date') < 0 && this.type.indexOf('week') < 0) return
       return (
-        <Icon onClick={this.onPrevMonth.bind(this, index)} size="14" name="arrow-left"/>
+        <Icon onClick={this.onPrevMonth.bind(this, index)} size="12" name="arrow-left"/>
       )
     },
     renderNextMonth (index) {
       if (this.type.indexOf('date') < 0 && this.type.indexOf('week') < 0) return
       return (
-        <Icon onClick={this.onNextMonth.bind(this, index)} size="14" name="arrow-right"/>
+        <Icon onClick={this.onNextMonth.bind(this, index)} size="12" name="arrow-right"/>
       )
     },
     renderNextYear (index) {
       if (this.type === 'time') return
       return (
-        <Icon onClick={this.onNextYear.bind(this, index)} size="14" name="arrow-next"/>
+        <Icon onClick={this.onNextYear.bind(this, index)} size="12" name="arrow-next"/>
       )
     },
     renderHeadContent (index) {
@@ -300,7 +305,7 @@ export default {
                           isin={isIn}
                           class={style['date-item']}
                           onClick={this.onDateClick.bind(this, date)}
-                          onMouseover={this.onDateOver.bind(this, date)}
+                          onMouseover={this.onOver.bind(this, date)}
                         >
                           <div class={style['date-day']}>
                             <p
@@ -318,9 +323,9 @@ export default {
         </div>
       )
     },
-    onDateOver (date) {
+    onOver (date) {
       if (this.selectValue === null || this.selectValue && this.selectValue.length < 1 || !this.canhover || !this.range) return
-      this.selectValue[1] = format(date, 'yyyy/MM/dd')
+      this.selectValue[1] = format(date, this.fmt[this.type])
       this.$forceUpdate()
     },
     onDateClick (date) {
@@ -344,6 +349,7 @@ export default {
       }
       this.hasValue = true
       this.$forceUpdate()
+      this.callback()
     },
     renderYear (index) {
       const {dataArray, current, range, selectValue} = this
@@ -363,7 +369,7 @@ export default {
                   isin={isIn}
                   active={active}
                   onClick={this.onYearClick.bind(this, date)}
-                  onMouseover={this.onYearOver.bind(this, date)}
+                  onMouseover={this.onOver.bind(this, date)}
                 >
                   <p>{year}年</p>
                 </li>
@@ -372,11 +378,6 @@ export default {
           }
         </ul>
       )
-    },
-    onYearOver (date) {
-      if (this.selectValue === null || this.selectValue && this.selectValue.length < 1 || !this.canhover || !this.range) return
-      this.selectValue[1] = format(date, 'yyyy')
-      this.$forceUpdate()
     },
     onYearClick (date) {
       const {range, fmt, type, mutiple} = this
@@ -402,19 +403,30 @@ export default {
         }
       }
       this.$forceUpdate()
+      this.callback()
     },
     renderMonth (index) {
-      const {dataArray, current, selectValue} = this
-      const arr = selectValue === null ? [] : typeof selectValue === 'string' ? [selectValue] : selectValue
-      console.log(arr)
+      const {dataArray, current, selectValue, range, type} = this
+      const d = new Date()
+      const n = `${d.getFullYear()}/${d.getMonth() + 1}`
+      const ar = range ? [] : [n]
+      const arr = selectValue === null ? ar : typeof selectValue === 'string' ? [selectValue] : selectValue
       return (
         <ul type={this.type} class={style['date-list']}>
           {
             dataArray[index].map((item) => {
               const date = new Date(item)
-              const month  = date.getMonth() + 1
+              const month = date.getMonth() + 1
+              const v = format(date, 'yyyy/MM')
+              const isIn = this.isInSelect(date)
+              const active = this.renderMonthActive(arr, v)
               return (
-                <li onClick={this.onMonthClick.bind(this, date)}>
+                <li
+                  onClick={this.onMonthClick.bind(this, date)}
+                  onMouseover={this.onOver.bind(this, date)}
+                  isin={isIn}
+                  active={active}
+                >
                   <p>{this.parseNum(month)}月</p>
                 </li>
               )
@@ -423,8 +435,41 @@ export default {
         </ul>
       )
     },
+    renderMonthActive (arr, item) {
+      let result = false
+      arr.forEach(str => {
+        if (format(new Date(str), 'yyyy/MM') === item) {
+          result = true
+        }
+      })
+      return result
+    },
     onMonthClick (date) {
-
+      const {range, fmt, type, mutiple} = this
+      const v = format(date, fmt[type])
+      const d = new Date()
+      const n = `${d.getFullYear()}/${d.getMonth() + 1}`
+      const ar = range ? [] : [n]
+      this.selectValue = this.selectValue === null ? ar : typeof this.selectValue === 'string' ? [this.selectValue] : this.selectValue
+      if (!range) {
+        if (mutiple) {
+          this.selectValue.push(v)
+        } else {
+          this.selectValue = [v]
+        }
+      } else {
+        if (!this.canhover) {
+          this.selectValue = [v]
+          this.canhover = true
+        }
+        if (this.selectValue.length < 2) {
+          this.selectValue.push(v)
+        } else if (this.selectValue.length === 2) {
+          this.canhover = false
+        }
+      }
+      this.$forceUpdate()
+      this.callback()
     },
     renderTime (index) {
       const {dataArray} = this
@@ -484,6 +529,7 @@ export default {
     },
     renderFooterPrefix (index) {},
     renderFooterSuffix (index) {
+      if (!this.allowFooter) return
       return (
         <div>
           <Button type="default" outline>取消</Button>
@@ -571,7 +617,7 @@ export default {
         current = `${select}/01`
         if (range) {
           const c = new Date(current)
-          next = this.select && this.select[1] ? format(new Date(`${this.select[1]}/01`), fmt['date']) : format(addMonths(c, 1), fmt['date'])
+          next = this.select && this.select[1] ? format(new Date(`${this.select[1]}/01`), fmt['date']) : format(addYears(c, 1), fmt['date'])
         }
       } else if (type === 'week') {
         current = this.parseWeekToDate(typeof select === 'string' ? select : select[0])
@@ -606,35 +652,54 @@ export default {
     onRangeChange (v) {
       this.initValue()
     },
-    callback (v) {
-      // console.log(v)
+    callback () {
+      const {range, mutiple} = this
+      if (range && this.selectValue.length === 2 || !range || !range) {
+        this.$emit('input', this.selectValue)
+        this.$emit('change', {
+          value: this.selectValue,
+          type: this.type,
+          format,
+          fmt: this.fmt
+        })
+        if (!this.allowFooter && !this.mutiple) {
+          this.close()
+        }
+      }
+    },
+    close () {
+      this.$pop.hide()
     }
   },
   watch: {
     'range': 'onRangeChange',
     'select': 'initCurrent',
-    'current': 'getDataArray',
-    'selectValue': 'callback'
+    'current': 'getDataArray'
   },
   mounted () {
-
+    this.$pop = this.$refs.pop
   },
   created () {
     this.initValue()
   },
   render (h) {
-    return (
-      <div class={style['date']} style={{
-      }}>
-        <p>{this.select}</p>
-        {this.renderCore()}
-      </div>
-      // <Popover>
-      //   <Input placeholder={this.placeholder} suffix-icon="date"/>
-      //   <div class={style['date']} slot="content">
-      //     {this.renderCore()}
-      //   </div>
-      // </Popover>
-    )
+    if (this.static) {
+      return (
+        <div class={style['date']} style={{
+        }}>
+          <p>{this.select}</p>
+          {this.renderCore()}
+        </div>
+      )
+    } else {
+      return (
+        <Popover ref="pop">
+          <Input value={this.selectValue} placeholder={this.placeholder} suffix-icon="date"/>
+          <div class={style['date']} slot="content">
+            {this.renderCore()}
+          </div>
+        </Popover>
+      )
+    }
   }
 }
