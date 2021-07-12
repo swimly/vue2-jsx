@@ -9,14 +9,48 @@
 </head>
 <body>
   <div id="app">
-    <m-date-picker type="primary">按钮</m-date-picker>
+    <m-row :gutter="12">
+      <m-col :span="8">
+        <m-date-picker :range="range" placeholder="请选择日期" type="date"></m-date-picker>
+      </m-col>
+      <m-col :span="8">
+        <m-date-picker :range="range" placeholder="请选择日期时间" type="datetime"></m-date-picker>
+      </m-col>
+      <m-col :span="8">
+        <m-date-picker :range="range" placeholder="请选择年份" type="year"></m-date-picker>
+      </m-col>
+      <m-col :span="8">
+        <m-date-picker :range="range" placeholder="请选择月份" type="month"></m-date-picker>
+      </m-col>
+      <m-col :span="8">
+        <m-date-picker :range="range" placeholder="请选择星期" type="week"></m-date-picker>
+      </m-col>
+      <m-col :span="8">
+        <m-date-picker :range="range" placeholder="请选择时间" type="time"></m-date-picker>
+      </m-col>
+      <m-col :span="8">
+        <m-date-picker :range="range" placeholder="请选择季度" type="quart"></m-date-picker>
+      </m-col>
+    </m-row>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="../../../dist/mui.js"></script>
   <script>
     Vue.use(MUI)
     new Vue({
-      el: '#app'
+      el: '#app',
+      data: function () {
+        return {
+          date1: '2021/6/5',
+          date2: '2021/7/5 12:00:00',
+          date3: '2020',
+          date4: '2020/4',
+          date5: '2020/23',
+          date6: '08:59:00',
+          date7: '2020/1',
+          range: false
+        }
+      }
     })
   </script>
 </body>

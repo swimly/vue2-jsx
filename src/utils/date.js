@@ -16,7 +16,7 @@ const splitArray = (array, subGroupLength) => {
   }
   return newArray;
 }
-const thisFullMonthDays = (date) => {
+const thisFullMonthDays = (date, startW) => {
   const C = date
   const P = subMonths(C, 1)
   const N = addMonths(C, 1)
@@ -25,7 +25,7 @@ const thisFullMonthDays = (date) => {
   let prev = thisMonthDays(P)
   let next = thisMonthDays(N)
   const fw = getDay(start)
-  prev = prev.splice(prev.length - fw + 0, prev.length)
+  prev = prev.splice(prev.length - fw + startW, prev.length)
   const length = 42 - (prev.length + arr.length)
   next = next.splice(0, length)
   let result = [...prev, ...arr, ...next]
@@ -54,18 +54,6 @@ const thisYearMonths = (date) => {
   })
 }
 
-const thisWeekMonth = (str) => {
-  const year = str.substring(0, 4)
-  const index = parseInt(str.substring(5, str.length))
-  const start = new Date(`${year}/1/1`)
-  const end = new Date(`${year}/12/30`)
-  const arrays = eachWeekOfInterval({
-    start,
-    end
-  })
-  return thisFullMonthDays(arrays[index])
-}
-
 
 const generateArray = (start, end) => {
   var arr = [];
@@ -92,7 +80,6 @@ export default {
   thisFullMonthDays,
   latest15Years,
   thisYearMonths,
-  thisWeekMonth,
   timeData,
   quartData
 }
