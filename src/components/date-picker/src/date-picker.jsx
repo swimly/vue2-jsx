@@ -347,7 +347,9 @@ export default {
     },
     renderYear (index) {
       const {dataArray, current, range, selectValue} = this
-      const arr = selectValue === null ? [`${(new Date()).getFullYear()}`] : typeof selectValue === 'string' ? [selectValue] : selectValue
+      const n = `${(new Date()).getFullYear()}`
+      const ar = range ? [] : [n]
+      const arr = selectValue === null ? ar : typeof selectValue === 'string' ? [selectValue] : selectValue
       return (
         <ul type={this.type} class={style['date-list']}>
           {
@@ -361,6 +363,7 @@ export default {
                   isin={isIn}
                   active={active}
                   onClick={this.onYearClick.bind(this, date)}
+                  onMouseover={this.onYearOver.bind(this, date)}
                 >
                   <p>{year}年</p>
                 </li>
@@ -370,27 +373,48 @@ export default {
         </ul>
       )
     },
+    onYearOver (date) {
+      if (this.selectValue === null || this.selectValue && this.selectValue.length < 1 || !this.canhover || !this.range) return
+      this.selectValue[1] = format(date, 'yyyy')
+      this.$forceUpdate()
+    },
     onYearClick (date) {
-      const {range, fmt, type} = this
+      const {range, fmt, type, mutiple} = this
+      const v = format(date, fmt[type])
+      const n = `${(new Date()).getFullYear()}`
+      const ar = range ? [] : [n]
+      this.selectValue = this.selectValue === null ? ar : typeof this.selectValue === 'string' ? [this.selectValue] : this.selectValue
       if (!range) {
-        this.selectValue = format(date, fmt['date'])
+        if (mutiple) {
+          this.selectValue.push(v)
+        } else {
+          this.selectValue = [v]
+        }
+      } else {
+        if (!this.canhover) {
+          this.selectValue = [v]
+          this.canhover = true
+        }
+        if (this.selectValue.length < 2) {
+          this.selectValue.push(v)
+        } else if (this.selectValue.length === 2) {
+          this.canhover = false
+        }
       }
       this.$forceUpdate()
-      console.log(this.selectValue)
     },
     renderMonth (index) {
-      const {dataArray, current} = this
-      const now = new Date(current[index])
-      const nm = now.getMonth() + 1
+      const {dataArray, current, selectValue} = this
+      const arr = selectValue === null ? [] : typeof selectValue === 'string' ? [selectValue] : selectValue
+      console.log(arr)
       return (
         <ul type={this.type} class={style['date-list']}>
           {
             dataArray[index].map((item) => {
               const date = new Date(item)
               const month  = date.getMonth() + 1
-              const active = nm === month
               return (
-                <li active={active}>
+                <li onClick={this.onMonthClick.bind(this, date)}>
                   <p>{this.parseNum(month)}月</p>
                 </li>
               )
@@ -398,6 +422,9 @@ export default {
           }
         </ul>
       )
+    },
+    onMonthClick (date) {
+
     },
     renderTime (index) {
       const {dataArray} = this

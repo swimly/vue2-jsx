@@ -46,7 +46,7 @@
       <m-date-picker :range="true" v-model="date31" placeholder="请选择日期" type="year"></m-date-picker>
     </m-col>
     <m-col :span="8">
-      <m-date-picker :range="range" placeholder="请选择月份" type="month"></m-date-picker>
+      <m-date-picker :mutiple="true" :range="range" placeholder="请选择月份" type="month"></m-date-picker>
     </m-col>
     <m-col :span="16">
       <m-date-picker :range="true" placeholder="请选择日期" type="month"></m-date-picker>
