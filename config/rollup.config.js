@@ -14,8 +14,9 @@ import babel from 'rollup-plugin-babel'
 export default (name, env) => {
   const isEntry = name === pkg.ui
   const isDev = env === 'dev'
+  const isW = pkg.webcomponent
   const root = isEntry ? './src/' : './src/components/'
-  const input = isEntry ? `${root}index.ts` : `${root}${name}/index.ts`
+  const input = isEntry ? isW ? `${root}component.ts` :`${root}index.ts` : `${root}${name}/index.ts`
   const outputRoot = isEntry ? './' : `./src/components/${name}/`
   const postcssPlugins = postcssConfig(isDev).plugins
   const formats = ['umd']
