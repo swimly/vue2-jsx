@@ -12,12 +12,19 @@
     overflow:scroll;
     scroll-behavior: smooth;
   }
+  &:hover{
+    .scroller-bar{
+      transition: 0.3s;
+      opacity:1;
+    }
+  }
   &-bar{
     display:inline-block;
     background-color: v(background-black);
     position:absolute;
     border-radius: 4px;
     opacity:0.6;
+    opacity:0;
     &[type=y]{
       width: 4px;
       height: 100%;

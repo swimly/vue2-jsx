@@ -39,7 +39,7 @@ export default {
     },
     allowFooter: {
       type: Boolean,
-      default: false
+      default: true
     },
     mutiple: {
       type: Boolean,
@@ -99,6 +99,10 @@ export default {
         b = []
       }
       return b
+    },
+    currentString () {
+      const {selectValue} = this
+      return selectValue === null ? '' : typeof selectValue === 'string' ? selectValue : selectValue.join('-')
     }
   },
   methods: {
@@ -302,7 +306,7 @@ export default {
       const {banner} = this
       if (!banner.length) return
       return (
-        <ul class={style['date-banner']}>
+        <ul type={this.type} class={style['date-banner']}>
           {
             banner.map(item => {
               return (
@@ -387,7 +391,12 @@ export default {
         const fw = startOfWeek(new Date(), {
           weekStartsOn: this.startWeek
         })
-        wk = selectValue ? selectValue : format(fw, fmt[type])
+        const cw = format(fw, fmt[type])
+        if (selectValue === null) {
+          wk = range ? [] : [cw]
+        } else {
+          wk = typeof selectValue === 'string' ? [selectValue] : selectValue
+        }
       }
       let ma, mi
       if (range && selectValue !== null && typeof selectValue === 'object') {
@@ -400,9 +409,9 @@ export default {
           {
             dataArray[index].map((week, idx) => {
               const w = format(week[0], fmt[type])
-              const atv = type === 'week' && wk === w
+              const atv = type === 'week' && wk.indexOf(w) >= 0
               return (
-                <ul active={atv} value={w} class={style['date-week']} onClick={this.onWeekClick.bind(this, week)}>
+                <ul active={atv} value={w} class={style['date-week']} onClick={this.onWeekClick.bind(this, week, index)}>
                   {
                     week.map((item, index) => {
                       const date = new Date(item)
@@ -460,7 +469,7 @@ export default {
      * @param {*} date 
      * @returns 
      */
-    onWeekClick (date) {
+    onWeekClick (date, index) {
       const {type, fmt} = this
       if (type !== 'week') return
       this.selectValue = format(date[0], fmt[type])
@@ -489,7 +498,12 @@ export default {
           this.canhover = false
         }
       } else if (mutiple) {
-        this.selectValue.push(v)
+        const index = this.selectValue.indexOf(v)
+        if (index >= 0) {
+          this.selectValue.splice(index, 1)
+        } else {
+          this.selectValue.push(v)
+        }
       } else {
         this.selectValue = [v]
       }
@@ -732,19 +746,24 @@ export default {
      * @returns 
      */
     renderQuart (index) {
-      const {dataArray, selectValue, fmt, type, current} = this
+      const {dataArray, selectValue, fmt, type, range, current} = this
       const label = ['第一季度', '第二季度', '第三季度', '第四季度']
-      const now = new Date()
-      const val = selectValue ? selectValue : format(now, fmt[type])
-      const c = current[index]
-      const year = c.split('/')[0]
-      const cyear = val.split('/')[0]
-      const q = parseInt(val.split('/')[1])
+      const now = format(new Date(), fmt[type])
+      let cur
+      if (selectValue === null) {
+        cur = range ? [] : [now]
+      } else {
+        cur = typeof selectValue === 'string' ? [selectValue] : selectValue
+      }
+      const c = cur[index].split('/')
+      const year = c[0]
+      const quart = parseInt(c[1])
+      const cyear = current[index].split('/')[0]
       return (
         <ul type={this.type} class={style['date-list']}>
           {
             dataArray[index].map((item) => {
-              const active = year === cyear && q === item
+              const active = year === cyear && item === quart
               return (
                 <li active={active} onClick={this.onQuartClick.bind(this, year, item)}>
                   <p>{label[item - 1]}</p>
@@ -784,13 +803,23 @@ export default {
         return this.renderQuart(index)
       }
     },
-    renderFooterPrefix (index) {},
+    renderFooterPrefix (index) {
+      const {type} = this
+      if (index > 0) return
+      if (type === 'datetime') {
+        return (
+          <div>
+            <p>请选择时间</p>
+          </div>
+        )
+      }
+    },
     renderFooterSuffix (index) {
-      if (!this.allowFooter) return
+      if (!this.allowFooter || this.range && index < 1) return
       return (
         <div>
-          <Button type="default" outline>取消</Button>
-          <Button>确定</Button>
+          <Button onClick={this.onClose} type="default" outline>取消</Button>
+          <Button onClick={this.onClose}>确定</Button>
         </div>
       )
     },
@@ -937,16 +966,21 @@ export default {
       const {mutiple, range, canhover, type} = this
       if (mutiple || range && canhover || type === 'time') return
       const fd = typeof v === 'string' ? [v] : v
+      this.selectValue = fd
+      this.$forceUpdate()
       this.$emit('input', fd)
       this.$emit('change', fd)
-      this.close()
+    },
+    onClose () {
+      if (this.allowFooter) {
+        this.$pop.hide()
+      }
     },
     /**
      * 关闭弹窗
      */
     close () {
-      if (!this.$pop) return
-      this.$pop.hide()
+      console.log(this.selectValue)
     }
   },
   watch: {
@@ -970,8 +1004,8 @@ export default {
       )
     } else {
       return (
-        <Popover ref="pop">
-          <Input value={this.selectValue} placeholder={this.placeholder} suffix-icon="date"/>
+        <Popover clickable={!this.allowFooter} onClose={this.close} ref="pop" padding={0}>
+          <Input value={this.currentString} placeholder={this.placeholder} suffix-icon="date"/>
           <div class={style['date']} slot="content">
             {this.renderCore()}
           </div>

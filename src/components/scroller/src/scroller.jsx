@@ -137,13 +137,13 @@ export default {
     erd.listenTo(this.$refs.content.childNodes[0], (el) => {
       if (!this.scrollBarWidth) return
       this.init()
+      if (this.scrollTop) {
+        this.$content.scrollTop = this.scrollTop
+      }
+      if (this.scrollLeft) {
+        this.$content.scrollLeft = this.scrollLeft
+      }
     })
-    if (this.scrollTop) {
-      this.$content.scrollTop = this.scrollTop
-    }
-    if (this.scrollLeft) {
-      this.$content.scrollLeft = this.scrollLeft
-    }
   },
   render (h) {
     return (
