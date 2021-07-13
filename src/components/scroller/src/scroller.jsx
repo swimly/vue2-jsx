@@ -12,6 +12,10 @@ export default {
     scrollTop: {
       type: Number,
       default: 0
+    },
+    step: {
+      type: Number,
+      default: 0
     }
   },
   data () {
@@ -23,7 +27,16 @@ export default {
       scrollHeight: 0,
       scrollleft: this.scrollLeft,
       scrolltop: this.scrollTop,
-      show: false
+      show: false,
+      timer: null,
+      t1: {
+        top: 0,
+        left: 0
+      },
+      t2: {
+        top: 0,
+        left:0
+      }
     }
   },
   methods: {
@@ -36,7 +49,7 @@ export default {
     },
     renderBarX () {
       const {width, scrollWidth} = this
-      if (!width || width >= scrollWidth) return
+      if (!width || scrollWidth - width <= 1) return
       let s = {}
       const scale = width / scrollWidth
       const barSize = width * scale
@@ -67,6 +80,31 @@ export default {
     onScroll () {
       this.scrollleft = this.$content.scrollLeft
       this.scrolltop = this.$content.scrollTop
+      clearTimeout(this.timer)
+      this.t1 = {
+        top: this.$content.scrollTop,
+        left: this.$content.scrollLeft
+      }
+      this.timer = setTimeout(() => {
+        this.t2 = {
+          left: this.$content.scrollLeft,
+          top: this.$content.scrollTop
+        }
+        if (this.t1.left === this.t2.left && this.t1.top === this.t2.top) {
+          if (this.step) {
+            const sy = Math.round(this.t2.top / this.step)
+            const sx = Math.round(this.t2.left / this.step)
+            this.$content.scrollTop = sy * this.step
+            this.$content.scrollLeft = sx * this.step
+            this.$emit('scrollEnd', {
+              top: sy * this.step,
+              left: sx * this.step
+            })
+          } else {
+            this.$emit('scrollEnd', this.t2)
+          }
+        }
+      }, 100)
       this.$emit('update:scrollLeft', this.scrollleft)
       this.$emit('update:scrollTop', this.scrolltop)
       this.$emit('scroll', {
@@ -93,13 +131,19 @@ export default {
   mounted () {
     this.$content = this.$refs.content
     const erd = elementResizeDetectorMaker({
-      strategy: 'scroll',
+      strategy: 'object',
       callOnAdd: true
     })
     erd.listenTo(this.$refs.content.childNodes[0], (el) => {
       if (!this.scrollBarWidth) return
       this.init()
     })
+    if (this.scrollTop) {
+      this.$content.scrollTop = this.scrollTop
+    }
+    if (this.scrollLeft) {
+      this.$content.scrollLeft = this.scrollLeft
+    }
   },
   render (h) {
     return (

@@ -10,6 +10,18 @@
   <p></p>
   <m-row :gutter="12">
     <m-col :span="8">
+      <m-date-picker :range="range" placeholder="请选择时间" type="time"></m-date-picker>
+    </m-col>
+    <m-col :span="16">
+      <m-date-picker :range="true" placeholder="请选择日期" type="time"></m-date-picker>
+    </m-col>
+    <m-col :span="8">
+      <m-date-picker :range="range" v-model="date6" placeholder="请选择时间" type="time"></m-date-picker>
+    </m-col>
+    <m-col :span="16">
+      <m-date-picker :range="true" v-model="date61" placeholder="请选择日期" type="time"></m-date-picker>
+    </m-col>
+    <m-col :span="8">
       <m-date-picker :mutiple="true" placeholder="请选择日期" type="date"></m-date-picker>
     </m-col>
     <m-col :span="16">
@@ -62,18 +74,6 @@
     </m-col>
     <m-col :span="12">
       <m-date-picker v-model="date5" :range="range" placeholder="请选择星期" type="week"></m-date-picker>
-    </m-col>
-    <m-col :span="8">
-      <m-date-picker :range="range" placeholder="请选择时间" type="time"></m-date-picker>
-    </m-col>
-    <m-col :span="16">
-      <m-date-picker :range="true" placeholder="请选择日期" type="time"></m-date-picker>
-    </m-col>
-    <m-col :span="8">
-      <m-date-picker :range="range" v-model="date6" placeholder="请选择时间" type="time"></m-date-picker>
-    </m-col>
-    <m-col :span="16">
-      <m-date-picker :range="true" v-model="date61" placeholder="请选择日期" type="time"></m-date-picker>
     </m-col>
     <m-col :span="8">
       <m-date-picker :range="range" placeholder="请选择季度" type="quart"></m-date-picker>

@@ -19,7 +19,7 @@
   "keywords": [],
   "author": "",
   "var": false,
-  "px2rem": true,
+  "px2rem": false,
   "prefix": "mc",
   "cssmodule": false,
   "browserslist": [

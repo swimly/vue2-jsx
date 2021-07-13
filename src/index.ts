@@ -19,6 +19,7 @@ import MTab from './components/tab/src/tab'
 import MTabItem from './components/tab-item/src/tab-item'
 import MPagination from './components/pagination/src/pagination'
 import MDatePicker from './components/date-picker/src/date-picker'
+import MPage from './components/page/src/page'
 
 import Message from './components/message/index'
 import Notification from './components/notification/index'
@@ -27,6 +28,7 @@ import Mask from './components/mask/index'
 import Popover from './components/popover/index'
 
 const components = [
+  MPage,
   MDatePicker,
   MPagination,
   MTab,

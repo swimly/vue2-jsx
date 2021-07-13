@@ -7,6 +7,7 @@ import Scroller from '../../scroller/src/scroller'
 import Button from '../../button/src/button'
 import D from '../../../utils/date'
 import {format, addYears, addMonths, subMonths, eachWeekOfInterval, subYears, isWithinInterval, min, max, startOfWeek} from 'date-fns'
+import { eachMonthOfInterval } from 'date-fns/esm';
 export default {
   name: 'm-date-picker',
   props: {
@@ -46,7 +47,15 @@ export default {
     },
     static: {
       type: Boolean,
-      default: true
+      default: false
+    },
+    defaultTime: {
+      type: String,
+      default: '09:00:00'
+    },
+    timeHeight: {
+      type: Number,
+      default: 35
     }
   },
   data () {
@@ -57,7 +66,10 @@ export default {
       dataArray: [],
       hasValue: false,
       canhover: true,
-      $pop: null
+      $pop: null,
+      t1: 0,
+      t2: 0,
+      timer: null
     }
   },
   computed: {
@@ -93,6 +105,10 @@ export default {
     renderPopYear (index) {},
     renderPopMonth (index) {},
     renderPopTime (index) {},
+    /**
+     * 上一年
+     * @param {*} index 
+     */
     onPrevYear (index) {
       const {type, current, fmt} = this
       const d = type === 'year' ? 15 : 1
@@ -108,6 +124,10 @@ export default {
       })
       this.getDataArray()
     },
+    /**
+     * 上一月
+     * @param {*} index 
+     */
     onPrevMonth (index) {
       const {type, current, fmt} = this
       current.forEach((item, idx) => {
@@ -117,6 +137,10 @@ export default {
       })
       this.getDataArray()
     },
+    /**
+     * 下一月
+     * @param {*} index 
+     */
     onNextMonth (index) {
       const {type, current, fmt} = this
       current.forEach((item, idx) => {
@@ -126,6 +150,10 @@ export default {
       })
       this.getDataArray()
     },
+    /**
+     * 下一年点击
+     * @param {*} index 
+     */
     onNextYear (index) {
       let {type, current, fmt} = this
       const d = type === 'year' ? 15 : 1
@@ -141,30 +169,55 @@ export default {
       })
       this.getDataArray()
     },
+    /**
+     * 渲染上一年
+     * @param {*} index 
+     * @returns 
+     */
     renderPrevYear (index) {
       if (this.type === 'time') return
       return (
         <Icon onClick={this.onPrevYear.bind(this, index)} size="12" name="arrow-prev"/>
       )
     },
+    /**
+     * 渲染上一月
+     * @param {*} index 
+     * @returns 
+     */
     renderPrevMonth (index) {
       if (this.type.indexOf('date') < 0 && this.type.indexOf('week') < 0) return
       return (
         <Icon onClick={this.onPrevMonth.bind(this, index)} size="12" name="arrow-left"/>
       )
     },
+    /**
+     * 渲染下一月
+     * @param {*} index 
+     * @returns 
+     */
     renderNextMonth (index) {
       if (this.type.indexOf('date') < 0 && this.type.indexOf('week') < 0) return
       return (
         <Icon onClick={this.onNextMonth.bind(this, index)} size="12" name="arrow-right"/>
       )
     },
+    /**
+     * 渲染下一年
+     * @param {*} index 
+     * @returns 
+     */
     renderNextYear (index) {
       if (this.type === 'time') return
       return (
         <Icon onClick={this.onNextYear.bind(this, index)} size="12" name="arrow-next"/>
       )
     },
+    /**
+     * 渲染头部中间区域
+     * @param {*} index 
+     * @returns 
+     */
     renderHeadContent (index) {
       const {type, current} = this
       let dates = []
@@ -196,9 +249,21 @@ export default {
         return this.renderHeadItem(`${dates[index].getFullYear()}年`, this.renderPopYear, true)
       }
     },
+    /**
+     * 数字处理，小于10自动添加0
+     * @param {*} num 
+     * @returns 
+     */
     parseNum (num) {
       return num >= 10 ? `${num}` : `0${num}`
     },
+    /**
+     * 渲染头部元素
+     * @param {*} value 
+     * @param {*} event 
+     * @param {*} arrow 
+     * @returns 
+     */
     renderHeadItem (value, event, arrow) {
       return (
         <p plain={!arrow} onClick={event} class={style['date-head-item']}>
@@ -207,6 +272,11 @@ export default {
         </p>
       )
     },
+    /**
+     * 渲染头部
+     * @param {*} index 
+     * @returns 
+     */
     renderHead (index) {
       return (
         <div class={style['date-head']}>
@@ -224,6 +294,10 @@ export default {
         </div>
       )
     },
+    /**
+     * 渲染星期名称
+     * @returns 
+     */
     renderBanner () {
       const {banner} = this
       if (!banner.length) return
@@ -239,6 +313,11 @@ export default {
         </ul>
       )
     },
+    /**
+     * 判断当前日期是否在选择范围内
+     * @param {*} date 
+     * @returns 
+     */
     isInSelect (date) {
       const {selectValue} = this
       if (selectValue === null || typeof selectValue !== 'object' || selectValue.length < 2 || !this.range) return
@@ -255,6 +334,11 @@ export default {
         end: mx
       })
     },
+    /**
+     * 判断当前日期是否选中
+     * @param {*} date 
+     * @returns 
+     */
     isCurrent (date) {
       const {selectValue} = this
       if (selectValue === null || this.type === 'week') return
@@ -269,6 +353,11 @@ export default {
       })
       return result
     },
+    /**
+     * 将选中的值从小到大排列
+     * @param {*} selectValue 
+     * @returns 
+     */
     sortDate (selectValue) {
       let arr = []
       const type = this.type.indexOf('date') >= 0 ? 'date' : this.type
@@ -277,6 +366,11 @@ export default {
       })
       return [min(arr), max(arr)]
     },
+    /**
+     * 渲染日期，星期主表
+     * @param {*} index 
+     * @returns 
+     */
     renderMonthDay (index) {
       const {dataArray, current, range, hasValue, selectValue, type, fmt} = this
 
@@ -308,7 +402,7 @@ export default {
               const w = format(week[0], fmt[type])
               const atv = type === 'week' && wk === w
               return (
-                <ul active={atv} value={week} class={style['date-week']} onClick={this.onWeekClick.bind(this, week)}>
+                <ul active={atv} value={w} class={style['date-week']} onClick={this.onWeekClick.bind(this, week)}>
                   {
                     week.map((item, index) => {
                       const date = new Date(item)
@@ -319,7 +413,7 @@ export default {
                       const value = format(date, fmt['date'])
                       const isCurrent = this.isCurrent(date)
                       const isIn = this.isInSelect(date)
-                      const disabled = `${iy}/${im}` !== `${year}/${month}`
+                      const disabled = `${iy}/${im}` !== `${year}/${month}` && type !== 'week'
                       const isStart = value === mi
                       const isEnd = value === ma
                       return (
@@ -350,17 +444,35 @@ export default {
         </div>
       )
     },
+    /**
+     * 范围选择鼠标移过
+     * @param {*} date 
+     * @param {*} disabled 
+     * @returns 
+     */
     onOver (date, disabled) {
       if (this.selectValue === null || this.selectValue && this.selectValue.length < 1 || !this.canhover || !this.range || disabled) return
       this.selectValue[1] = format(date, this.fmt[this.type])
       this.$forceUpdate()
     },
+    /**
+     * 星期点击
+     * @param {*} date 
+     * @returns 
+     */
     onWeekClick (date) {
       const {type, fmt} = this
       if (type !== 'week') return
       this.selectValue = format(date[0], fmt[type])
       this.$forceUpdate()
+      this.callback(this.selectValue)
     },
+    /**
+     * 日期列表点击
+     * @param {*} date 
+     * @param {*} disabled 
+     * @returns 
+     */
     onDateClick (date, disabled) {
       let {mutiple, range, type, fmt, selectValue} = this
       if (type === 'week' || disabled) return
@@ -383,8 +495,13 @@ export default {
       }
       this.hasValue = true
       this.$forceUpdate()
-      this.callback()
+      this.callback(this.selectValue)
     },
+    /**
+     * 渲染年份列表
+     * @param {*} index 
+     * @returns 
+     */
     renderYear (index) {
       const {dataArray, current, range, selectValue} = this
       const n = `${(new Date()).getFullYear()}`
@@ -394,7 +511,6 @@ export default {
       if (range && selectValue !== null && typeof selectValue === 'object') {
         ma = parseInt(selectValue[0]) > parseInt(selectValue[1]) ? selectValue[0] : selectValue[1]
         mi = parseInt(selectValue[0]) > parseInt(selectValue[1]) ? selectValue[1] : selectValue[0]
-        console.log(mi, ma)
       }
       return (
         <ul type={this.type} class={style['date-list']}>
@@ -423,6 +539,10 @@ export default {
         </ul>
       )
     },
+    /**
+     * 年份列表点击事件
+     * @param {*} date 
+     */
     onYearClick (date) {
       const {range, fmt, type, mutiple} = this
       const v = format(date, fmt[type])
@@ -448,41 +568,51 @@ export default {
       }
       this.hasValue = true
       this.$forceUpdate()
-      this.callback()
+      this.callback(this.selectValue)
     },
+    /**
+     * 渲染月份列表
+     * @param {*} index 
+     * @returns 
+     */
     renderMonth (index) {
-      const {dataArray, current, selectValue, range, type, fmt} = this
-      const d = new Date()
-      const n = `${d.getFullYear()}/${d.getMonth() + 1}`
-      const ar = range ? [] : [n]
-      const arr = selectValue === null ? ar : typeof selectValue === 'string' ? [selectValue] : selectValue
+      const {dataArray, selectValue, range, type, fmt} = this
+      const now = format(new Date(), fmt[type])
+      let val
+      if (selectValue === null) {
+        val = range ? [] : [now]
+      } else {
+        val = typeof selectValue === 'string' ? [selectValue] : selectValue
+      }
+      this.selectValue = val
       let ma, mi
-      if (range && selectValue !== null && typeof selectValue === 'object') {
-        const na = this.sortDate(this.selectValue)
-        ma = format(na[1], fmt[type])
-        mi = format(na[0], fmt[type])
-        console.log(mi, ma)
+      if (range && selectValue !== null && typeof selectValue === 'object' && selectValue.length) {
+        let na = []
+        this.selectValue.forEach(item => {
+          na.push(new Date(`${item}/01`))
+        })
+        const ari = [min(na), max(na)]
+        ma = format(ari[1], fmt[type])
+        mi = format(ari[0], fmt[type])
       }
       return (
         <ul type={this.type} class={style['date-list']}>
           {
             dataArray[index].map((item) => {
-              const date = new Date(item)
-              const month = date.getMonth() + 1
-              const value = format(date, fmt[type])
-              const v = format(date, 'yyyy/MM')
-              const isIn = this.isInSelect(date)
-              const active = this.renderMonthActive(arr, v)
+              const month = item.getMonth() + 1
+              const value = format(item, fmt[type])
+              const active = val.indexOf(value) >= 0
+              const isIn = this.isInMonth(item) && !this.mutipleF
               const isStart = value === mi
               const isEnd = value === ma
               return (
                 <li
-                  onClick={this.onMonthClick.bind(this, date)}
-                  onMouseover={this.onOver.bind(this, date, false)}
-                  isin={isIn}
                   active={active}
+                  isin={isIn}
                   start={isStart}
                   end={isEnd}
+                  onClick={this.onMonthClick.bind(this, item)}
+                  onMouseover={this.onOver.bind(this, item, false)}
                 >
                   <p>{this.parseNum(month)}月</p>
                 </li>
@@ -492,15 +622,27 @@ export default {
         </ul>
       )
     },
-    renderMonthActive (arr, item) {
-      let result = false
-      arr.forEach(str => {
-        if (format(new Date(str), 'yyyy/MM') === item) {
-          result = true
-        }
+    isInMonth (date) {
+      if (this.selectValue.length < 2) return
+      const arr = []
+      this.selectValue.forEach(item => {
+        arr.push(new Date(`${item}/01`))
       })
-      return result
+      const arrs = eachMonthOfInterval({
+        start: min(arr),
+        end: max(arr)
+      })
+      let strings = []
+      const v = format(date, this.fmt[this.type])
+      arrs.forEach(item => {
+        strings.push(format(item, this.fmt[this.type]))
+      })
+      return strings.indexOf(v) >= 0
     },
+    /**
+     * 月份列表点击事件
+     * @param {*} date 
+     */
     onMonthClick (date) {
       const {range, fmt, type, mutiple} = this
       const v = format(date, fmt[type])
@@ -526,11 +668,26 @@ export default {
         }
       }
       this.$forceUpdate()
-      this.callback()
+      this.callback(this.selectValue)
     },
+    /**
+     * 渲染时分秒
+     * @param {*} index 
+     * @returns 
+     */
     renderTime (index) {
-      const {dataArray} = this
+      const {dataArray, selectValue, type, fmt, defaultTime, range, timeHeight} = this
+      const now = defaultTime ? defaultTime : format(new Date(), fmt[type])
+      let val = selectValue === null ? [now] : typeof selectValue === 'string' ? [selectValue] : selectValue
+      if (range && val.length < 2) {
+        val.push(now)
+      }
+      this.selectValue = val
+      const cur = val[index]
+      const arr =  cur.split(':')
       return dataArray[index].map((group, col) => {
+        const i = parseInt(arr[col])
+        const top = timeHeight * i
         return (
           <div 
             class={style['date-scroll']}
@@ -538,12 +695,13 @@ export default {
               width: `${100/dataArray[index].length}%`
             }}
           >
-            <Scroller>
+            <Scroller step={this.timeHeight} scroll-top={top} onScrollEnd={this.onTimeScroll.bind(this, index, col)}>
               <ul class={style['date-time']}>
                 {
                   group.map((item, idx) => {
+                    const active = i === idx
                     return (
-                      <li>{this.parseNum(item)}</li>
+                      <li active={active}>{this.parseNum(item)}</li>
                     )
                   })
                 }
@@ -553,15 +711,42 @@ export default {
         )
       })
     },
+    /**
+     * 监听时间滚动
+     * @param {*} col 
+     * @param {*} index 
+     * @param {*} d 
+     */
+    onTimeScroll (col, index, d) {
+      const {dataArray, selectValue} = this
+      const current = d.top / this.timeHeight
+      const arr = selectValue[col].split(':')
+      arr[index] = this.parseNum(dataArray[col][index][current])
+      this.selectValue[col] = arr.join(':')
+      this.$forceUpdate()
+      this.callback(this.selectValue)
+    },
+    /**
+     * 渲染季度列表
+     * @param {*} index 
+     * @returns 
+     */
     renderQuart (index) {
-      const {dataArray} = this
+      const {dataArray, selectValue, fmt, type, current} = this
       const label = ['第一季度', '第二季度', '第三季度', '第四季度']
+      const now = new Date()
+      const val = selectValue ? selectValue : format(now, fmt[type])
+      const c = current[index]
+      const year = c.split('/')[0]
+      const cyear = val.split('/')[0]
+      const q = parseInt(val.split('/')[1])
       return (
         <ul type={this.type} class={style['date-list']}>
           {
             dataArray[index].map((item) => {
+              const active = year === cyear && q === item
               return (
-                <li>
+                <li active={active} onClick={this.onQuartClick.bind(this, year, item)}>
                   <p>{label[item - 1]}</p>
                 </li>
               )
@@ -570,6 +755,21 @@ export default {
         </ul>
       )
     },
+    /**
+     * 季度列表点击事件
+     * @param {*} y 
+     * @param {*} q 
+     */
+    onQuartClick (y, q) {
+      this.selectValue = `${y}/${this.parseNum(q)}`
+      this.$forceUpdate()
+      this.callback(this.selectValue)
+    },
+    /**
+     * 渲染中间内容区域
+     * @param {*} index 
+     * @returns 
+     */
     renderContent (index) {
       const {type} = this
       if (type.indexOf('date') >= 0 || type === 'week') {
@@ -594,6 +794,11 @@ export default {
         </div>
       )
     },
+    /**
+     * 渲染底部
+     * @param {*} index 
+     * @returns 
+     */
     renderFooter (index) {
       return (
         <div class={style['date-footer']}>
@@ -606,6 +811,10 @@ export default {
         </div>
       )
     },
+    /**
+     * 渲染日期面板
+     * @returns 
+     */
     renderCore () {
       const {dataArray} = this
       return dataArray.map((data, i) => {
@@ -621,6 +830,9 @@ export default {
         )
       })
     },
+    /**
+     * 生成渲染数据
+     */
     getDataArray () {
       let array = []
       const {current, type} = this
@@ -641,6 +853,9 @@ export default {
       })
       this.dataArray = array
     },
+    /**
+     * 初始化选中值
+     */
     initValue () {
       let {type, select, fmt, range} = this
       if (!select) {
@@ -648,12 +863,17 @@ export default {
         select = format(d, fmt[type])
       } else {
         this.selectValue = select
+        this.$emit('input', this.selectValue)
         select = typeof select === 'string' ? select : select[0]
         this.hasValue = true
         this.canhover = false
       }
       this.initCurrent(select)
     },
+    /**
+     * 初始化渲染模板基础数据
+     * @param {*} select 
+     */
     initCurrent (select) {
       const {type, fmt, range} = this
       let current = null
@@ -709,21 +929,23 @@ export default {
     onRangeChange (v) {
       this.initValue()
     },
-    callback () {
-      const {range, mutiple, allowFooter, canhover} = this
-      if (range && !canhover || !range || !range) {
-        if (mutiple || canhover) return
-        this.$emit('input', this.selectValue)
-        this.$emit('change', {
-          value: this.selectValue,
-          type: this.type,
-          format,
-          fmt: this.fmt
-        })
-        console.log('结束')
-      }
+    /**
+     * 综合处理返回事件
+     * @returns 
+     */
+    callback (v) {
+      const {mutiple, range, canhover, type} = this
+      if (mutiple || range && canhover || type === 'time') return
+      const fd = typeof v === 'string' ? [v] : v
+      this.$emit('input', fd)
+      this.$emit('change', fd)
+      this.close()
     },
+    /**
+     * 关闭弹窗
+     */
     close () {
+      if (!this.$pop) return
       this.$pop.hide()
     }
   },
@@ -743,7 +965,6 @@ export default {
       return (
         <div class={style['date']} style={{
         }}>
-          <p>{this.select}</p>
           {this.renderCore()}
         </div>
       )

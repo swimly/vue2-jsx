@@ -5,6 +5,7 @@ body{
   position:static;
   height: 100%;
   overflow:auto;
+  font-family: "微软雅黑"
 }
 .app-nav{
   top:0;
