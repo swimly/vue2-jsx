@@ -6,7 +6,7 @@ import Input from '../../input/src/input'
 import Scroller from '../../scroller/src/scroller'
 import Button from '../../button/src/button'
 import D from '../../../utils/date'
-import {format, addYears, addMonths, getYear, getMonth, subMonths, eachWeekOfInterval, subYears, isWithinInterval, min, max} from 'date-fns'
+import {format, addYears, addMonths, subMonths, eachWeekOfInterval, subYears, isWithinInterval, min, max, startOfWeek} from 'date-fns'
 export default {
   name: 'm-date-picker',
   props: {
@@ -46,7 +46,7 @@ export default {
     },
     static: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   data () {
@@ -269,8 +269,16 @@ export default {
       })
       return result
     },
+    sortDate (selectValue) {
+      let arr = []
+      const type = this.type.indexOf('date') >= 0 ? 'date' : this.type
+      selectValue.forEach(item => {
+        arr.push(new Date(format(new Date(item), this.fmt[type])))
+      })
+      return [min(arr), max(arr)]
+    },
     renderMonthDay (index) {
-      const {dataArray, current, range, hasValue, selectValue, type} = this
+      const {dataArray, current, range, hasValue, selectValue, type, fmt} = this
 
       const now = selectValue ? new Date(selectValue[index]) : new Date(current[index])
       const ny = now.getFullYear()
@@ -280,13 +288,27 @@ export default {
       const t = new Date(current[index])
       const iy = t.getFullYear()
       const im = t.getMonth() + 1
-
+      let wk
+      if (type === 'week') {
+        const fw = startOfWeek(new Date(), {
+          weekStartsOn: this.startWeek
+        })
+        wk = selectValue ? selectValue : format(fw, fmt[type])
+      }
+      let ma, mi
+      if (range && selectValue !== null && typeof selectValue === 'object') {
+        const na = this.sortDate(this.selectValue)
+        ma = format(na[1], fmt['date'])
+        mi = format(na[0], fmt['date'])
+      }
       return (
         <div class={style['date-month']}>
           {
             dataArray[index].map((week, idx) => {
+              const w = format(week[0], fmt[type])
+              const atv = type === 'week' && wk === w
               return (
-                <ul class={style['date-week']}>
+                <ul active={atv} value={week} class={style['date-week']} onClick={this.onWeekClick.bind(this, week)}>
                   {
                     week.map((item, index) => {
                       const date = new Date(item)
@@ -294,18 +316,23 @@ export default {
                       const month = date.getMonth() + 1
                       const year = date.getFullYear()
                       const active = !range && ny === year && nm === month && nd === day
+                      const value = format(date, fmt['date'])
                       const isCurrent = this.isCurrent(date)
                       const isIn = this.isInSelect(date)
                       const disabled = `${iy}/${im}` !== `${year}/${month}`
+                      const isStart = value === mi
+                      const isEnd = value === ma
                       return (
                         <li
                           active={active && !hasValue}
                           current={isCurrent}
                           disabled={disabled}
+                          start={isStart}
+                          end={isEnd}
                           isin={isIn}
                           class={style['date-item']}
-                          onClick={this.onDateClick.bind(this, date)}
-                          onMouseover={this.onOver.bind(this, date)}
+                          onClick={this.onDateClick.bind(this, date, disabled)}
+                          onMouseover={this.onOver.bind(this, date, disabled)}
                         >
                           <div class={style['date-day']}>
                             <p
@@ -323,13 +350,20 @@ export default {
         </div>
       )
     },
-    onOver (date) {
-      if (this.selectValue === null || this.selectValue && this.selectValue.length < 1 || !this.canhover || !this.range) return
+    onOver (date, disabled) {
+      if (this.selectValue === null || this.selectValue && this.selectValue.length < 1 || !this.canhover || !this.range || disabled) return
       this.selectValue[1] = format(date, this.fmt[this.type])
       this.$forceUpdate()
     },
-    onDateClick (date) {
+    onWeekClick (date) {
+      const {type, fmt} = this
+      if (type !== 'week') return
+      this.selectValue = format(date[0], fmt[type])
+      this.$forceUpdate()
+    },
+    onDateClick (date, disabled) {
       let {mutiple, range, type, fmt, selectValue} = this
+      if (type === 'week' || disabled) return
       this.selectValue = selectValue === null ? [] : typeof selectValue === 'string' ? [selectValue] : selectValue
       const v = format(date, fmt[type])
       if (range) {
@@ -356,6 +390,12 @@ export default {
       const n = `${(new Date()).getFullYear()}`
       const ar = range ? [] : [n]
       const arr = selectValue === null ? ar : typeof selectValue === 'string' ? [selectValue] : selectValue
+      let ma, mi
+      if (range && selectValue !== null && typeof selectValue === 'object') {
+        ma = parseInt(selectValue[0]) > parseInt(selectValue[1]) ? selectValue[0] : selectValue[1]
+        mi = parseInt(selectValue[0]) > parseInt(selectValue[1]) ? selectValue[1] : selectValue[0]
+        console.log(mi, ma)
+      }
       return (
         <ul type={this.type} class={style['date-list']}>
           {
@@ -364,12 +404,16 @@ export default {
               const year  = `${date.getFullYear()}`
               const isIn = this.isInSelect(date)
               const active = arr.indexOf(year) >= 0
+              const isStart = `${year}` === mi
+              const isEnd = `${year}` === ma
               return (
                 <li
                   isin={isIn}
+                  start={isStart}
+                  end={isEnd}
                   active={active}
                   onClick={this.onYearClick.bind(this, date)}
-                  onMouseover={this.onOver.bind(this, date)}
+                  onMouseover={this.onOver.bind(this, date, false)}
                 >
                   <p>{year}年</p>
                 </li>
@@ -402,30 +446,43 @@ export default {
           this.canhover = false
         }
       }
+      this.hasValue = true
       this.$forceUpdate()
       this.callback()
     },
     renderMonth (index) {
-      const {dataArray, current, selectValue, range, type} = this
+      const {dataArray, current, selectValue, range, type, fmt} = this
       const d = new Date()
       const n = `${d.getFullYear()}/${d.getMonth() + 1}`
       const ar = range ? [] : [n]
       const arr = selectValue === null ? ar : typeof selectValue === 'string' ? [selectValue] : selectValue
+      let ma, mi
+      if (range && selectValue !== null && typeof selectValue === 'object') {
+        const na = this.sortDate(this.selectValue)
+        ma = format(na[1], fmt[type])
+        mi = format(na[0], fmt[type])
+        console.log(mi, ma)
+      }
       return (
         <ul type={this.type} class={style['date-list']}>
           {
             dataArray[index].map((item) => {
               const date = new Date(item)
               const month = date.getMonth() + 1
+              const value = format(date, fmt[type])
               const v = format(date, 'yyyy/MM')
               const isIn = this.isInSelect(date)
               const active = this.renderMonthActive(arr, v)
+              const isStart = value === mi
+              const isEnd = value === ma
               return (
                 <li
                   onClick={this.onMonthClick.bind(this, date)}
-                  onMouseover={this.onOver.bind(this, date)}
+                  onMouseover={this.onOver.bind(this, date, false)}
                   isin={isIn}
                   active={active}
+                  start={isStart}
+                  end={isEnd}
                 >
                   <p>{this.parseNum(month)}月</p>
                 </li>
@@ -653,8 +710,9 @@ export default {
       this.initValue()
     },
     callback () {
-      const {range, mutiple} = this
-      if (range && this.selectValue.length === 2 || !range || !range) {
+      const {range, mutiple, allowFooter, canhover} = this
+      if (range && !canhover || !range || !range) {
+        if (mutiple || canhover) return
         this.$emit('input', this.selectValue)
         this.$emit('change', {
           value: this.selectValue,
@@ -662,9 +720,7 @@ export default {
           format,
           fmt: this.fmt
         })
-        if (!this.allowFooter && !this.mutiple) {
-          this.close()
-        }
+        console.log('结束')
       }
     },
     close () {

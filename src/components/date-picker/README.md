@@ -57,11 +57,11 @@
     <m-col :span="16">
       <m-date-picker :range="true" v-model="date41" placeholder="请选择日期" type="month"></m-date-picker>
     </m-col>
-    <m-col :span="24">
+    <m-col :span="12">
       <m-date-picker :range="range" placeholder="请选择星期" type="week"></m-date-picker>
     </m-col>
-    <m-col :span="24">
-      <m-date-picker :range="range" v-model="date5" placeholder="请选择星期" type="week"></m-date-picker>
+    <m-col :span="12">
+      <m-date-picker v-model="date5" :range="range" placeholder="请选择星期" type="week"></m-date-picker>
     </m-col>
     <m-col :span="8">
       <m-date-picker :range="range" placeholder="请选择时间" type="time"></m-date-picker>
