@@ -1,4 +1,4 @@
-import MSelect from './src/select.vue'
+import MSelect from './src/select'
 
 MSelect.install = Vue => {
   Vue.components(MSelect.name, MSelect)

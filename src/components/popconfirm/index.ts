@@ -1,4 +1,4 @@
-import MPopconfirm from './src/popconfirm.vue'
+import MPopconfirm from './src/popconfirm'
 
 MPopconfirm.install = Vue => {
   Vue.components(MPopconfirm.name, MPopconfirm)

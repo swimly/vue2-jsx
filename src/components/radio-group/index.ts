@@ -1,4 +1,4 @@
-import MRadioGroup from './src/radio-group.vue'
+import MRadioGroup from './src/radio-group'
 
 MRadioGroup.install = Vue => {
   Vue.components(MRadioGroup.name, MRadioGroup)

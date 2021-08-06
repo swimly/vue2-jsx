@@ -1,4 +1,4 @@
-import MTab from './src/tab.vue'
+import MTab from './src/tab'
 
 MTab.install = Vue => {
   Vue.components(MTab.name, MTab)

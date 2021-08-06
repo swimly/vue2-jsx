@@ -1,4 +1,4 @@
-import MForm from './src/form.vue'
+import MForm from './src/form'
 
 MForm.install = Vue => {
   Vue.components(MForm.name, MForm)

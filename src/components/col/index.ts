@@ -1,4 +1,4 @@
-import MCol from './src/col.vue'
+import MCol from './src/col'
 
 MCol.install = Vue => {
   Vue.components(MCol.name, MCol)

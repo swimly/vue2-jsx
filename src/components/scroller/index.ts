@@ -1,4 +1,4 @@
-import MScroller from './src/scroller.vue'
+import MScroller from './src/scroller'
 
 MScroller.install = Vue => {
   Vue.components(MScroller.name, MScroller)

@@ -5,7 +5,7 @@ module.exports = (isDev) => {
     plugins: [
       require('postcss-prepend-imports')({
         path: `./src/themes/${pkg.theme}`,
-        files: ['variable.css']
+        files: ['index.css']
       }),
       require('postcss-modules')({
         generateScopedName: pkg.cssmodule ? pkg.prefix + "-[local]_[hash:base64:5]" : pkg.prefix + "-[local]"

@@ -6,6 +6,7 @@
   "main": "dist/mui.min.js",
   "scripts": {
     "dev": "cross-env ENV=development rollup -wc ./config/rollup.config.dev.js",
+    "start": "cross-env ENV=development rollup -wc ./config/rollup.config.common.js",
     "build": "cross-env ENV=producrion rollup -c ./config/rollup.config.prod.js",
     "push:gitee": "git push gitee master",
     "push:github": "git push github master",

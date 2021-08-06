@@ -1,4 +1,4 @@
-import MFormItem from './src/form-item.vue'
+import MFormItem from './src/form-item'
 
 MFormItem.install = Vue => {
   Vue.components(MFormItem.name, MFormItem)

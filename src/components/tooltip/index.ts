@@ -1,4 +1,4 @@
-import MTooltip from './src/tooltip.vue'
+import MTooltip from './src/tooltip'
 
 MTooltip.install = Vue => {
   Vue.components(MTooltip.name, MTooltip)

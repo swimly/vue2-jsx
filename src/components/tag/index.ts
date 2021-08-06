@@ -1,4 +1,4 @@
-import MTag from './src/tag.vue'
+import MTag from './src/tag'
 
 MTag.install = Vue => {
   Vue.components(MTag.name, MTag)

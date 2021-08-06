@@ -1,4 +1,4 @@
-import MSwitch from './src/switch.vue'
+import MSwitch from './src/switch'
 
 MSwitch.install = Vue => {
   Vue.components(MSwitch.name, MSwitch)

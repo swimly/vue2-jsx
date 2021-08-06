@@ -1,4 +1,4 @@
-import MPage from './src/page.vue'
+import MPage from './src/page'
 
 MPage.install = Vue => {
   Vue.components(MPage.name, MPage)

@@ -1,4 +1,4 @@
-import MSpace from './src/space.vue'
+import MSpace from './src/space'
 
 MSpace.install = Vue => {
   Vue.components(MSpace.name, MSpace)

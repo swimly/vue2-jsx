@@ -1,4 +1,4 @@
-import MRow from './src/row.vue'
+import MRow from './src/row'
 
 MRow.install = Vue => {
   Vue.components(MRow.name, MRow)
