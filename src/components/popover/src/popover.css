@@ -31,6 +31,7 @@
     display:none;
     transition: 0.3s;
     opacity:0;
+    z-index: 1002;
     &[type=dark]{
       background-color: v(background-black);
       color: v(text-white);

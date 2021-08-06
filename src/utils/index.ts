@@ -9,7 +9,7 @@ export default {
     return noScroll - scroll;
   },
   offset (curEle: HTMLElement) {
-    let totalLeft = null, totalTop = null, par = curEle.offsetParent as HTMLElement;
+    let totalLeft = 0, totalTop = 0, par = curEle.offsetParent as HTMLElement;
     totalLeft += curEle.offsetLeft;
     totalTop += curEle.offsetTop
     while (par) {
@@ -24,7 +24,9 @@ export default {
     }
     return {
       left: totalLeft,
-      top: totalTop
+      top: totalTop,
+      width: curEle.offsetWidth,
+      height: curEle.offsetHeight
     }
   }
 }

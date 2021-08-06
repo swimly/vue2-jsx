@@ -6,6 +6,7 @@
 
 <div class="code">
   <m-button @click="mask">弹出遮罩</m-button>
+  <button class="button">弹出遮罩</button>
 </div>
 
 <!-- end -->
@@ -49,5 +50,15 @@
         }
       }
     })
+  }
+
+  var buttons = document.querySelectorAll('.button')
+  for (var i = 0; i < buttons.length; i ++) {
+    buttons[i].onclick = function () {
+      var mask = mui.Mask()
+      setTimeout(function () {
+        mask.hide()
+      }, 1000)
+    }
   }
 </script>

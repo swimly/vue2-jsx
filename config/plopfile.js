@@ -21,6 +21,10 @@ module.exports = plop => {
           type: 'add',
           path: `../src/components/${name}/src/${name}.css`,
           templateFile: `../src/temp/css.hbs`
+        },{
+          type: 'add',
+          path: `../src/components/${name}/index.common.ts`,
+          templateFile: `../src/temp/css.hbs`
         },
         {
           type: 'add',

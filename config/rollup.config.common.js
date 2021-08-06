@@ -3,10 +3,11 @@ import pkg from '../package.json'
 import json from 'rollup-plugin-json'
 import resolve from 'rollup-plugin-node-resolve'
 import postcss from 'rollup-plugin-postcss'
-import {terser} from 'rollup-plugin-terser'
+// import {terser} from 'rollup-plugin-terser'
 import commonjs from 'rollup-plugin-commonjs'
 import typescript from 'rollup-plugin-typescript'
 import babel from 'rollup-plugin-babel'
+import pug from 'rollup-plugin-pug'
 const root = './src/components'
 const functions = require('../src/utils/postcss.function.js')
 let components = [
@@ -64,13 +65,9 @@ components.forEach((item) => {
           require('cssnano')
         ]
       }),
+      pug(),
       commonjs(),
-      terser(),
-      typescript({
-        tsconfig: false,
-        experimentalDecorators: true,
-        module: 'es2015'
-      }),
+      typescript(),
       babel({
         exclude: [/\/core-js\//],
         runtimeHelpers: true,

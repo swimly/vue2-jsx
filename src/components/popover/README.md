@@ -24,6 +24,7 @@
     <m-button>鼠标移上来</m-button>
     <div style="width: 400px;" slot="content">当目标元素有进一步的描述和相关操作时，可以收纳到卡片中，根据用户的操作行为进行展现。</div>
   </m-popover>
+  <button class="button">按钮</button>
 </div>
 
 <!-- end -->
@@ -207,6 +208,15 @@
           this.$popover.show('00000000000')
         }
       }
+    })
+  }
+  var buttons = document.querySelectorAll('.button')
+  for (var i = 0; i < buttons.length; i ++) {
+    mui.Popover({
+      el: buttons[i],
+      trigger: 'click',
+      placement: 'right',
+      content: '你爱我我爱你，蜜雪冰城甜蜜蜜'
     })
   }
 </script>

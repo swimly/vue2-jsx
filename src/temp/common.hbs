@@ -1,0 +1,20 @@
+import Main from '../../utils/Main'
+interface Option {
+  el?: String | HTMLElement
+}
+class Component extends Main {
+  public el: HTMLElement
+  public opt: Option = {
+    el: ''
+  }
+  constructor (option: Option) {
+    super()
+    this.opt = Object.assign(this.opt, option)
+    this.el = typeof this.opt.el === 'string' ? document.querySelector(this.opt.el) as HTMLElement : this.opt.el as HTMLElement
+  }
+}
+export default class {
+  constructor (option:Option) {
+    return new Component(option)
+  }
+}
