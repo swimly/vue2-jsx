@@ -24,7 +24,18 @@
     <m-button>鼠标移上来</m-button>
     <div style="width: 400px;" slot="content">当目标元素有进一步的描述和相关操作时，可以收纳到卡片中，根据用户的操作行为进行展现。</div>
   </m-popover>
-  <button class="button">按钮</button>
+  <button class="button" placement="bottom-left">按钮</button>
+  <button class="button" placement="bottom">按钮</button>
+  <button class="button" placement="bottom-right">按钮</button>
+  <button class="button" placement="top-left">按钮</button>
+  <button class="button" placement="top">按钮</button>
+  <button class="button" placement="top-right">按钮</button>
+  <button class="button" placement="left-top">按钮</button>
+  <button class="button" placement="left">按钮</button>
+  <button class="button" placement="left-bottom">按钮</button>
+  <button class="button" placement="right-top">按钮</button>
+  <button class="button" placement="right">按钮</button>
+  <button class="button" placement="right-bottom">按钮</button>
 </div>
 
 <!-- end -->
@@ -212,10 +223,11 @@
   }
   var buttons = document.querySelectorAll('.button')
   for (var i = 0; i < buttons.length; i ++) {
+    const placement = buttons[i].getAttribute('placement')
     mui.Popover({
       el: buttons[i],
       trigger: 'click',
-      placement: 'right',
+      // placement: placement,
       content: '你爱我我爱你，蜜雪冰城甜蜜蜜'
     })
   }
